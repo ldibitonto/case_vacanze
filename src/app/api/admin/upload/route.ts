@@ -2,13 +2,18 @@ import { randomUUID } from "crypto";
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";
+import { put } from "@vercel/blob";
 
 // POST /api/admin/upload
-// Riceve un file immagine (multipart/form-data, campo "file") e lo salva in
-// public/uploads/properties, così è servito direttamente da Next.js come
-// asset statico all'URL ritornato. Va bene per uso locale/dev: se in futuro
-// l'app girerà su un hosting serverless (Vercel ecc.) il filesystem non è
-// persistente e andrà sostituito con uno storage esterno (S3, Vercel Blob...).
+// Riceve un file immagine (multipart/form-data, campo "file").
+// - Su Vercel il filesystem è di sola lettura e non persistente (a parte
+//   /tmp): non si può scrivere in public/uploads a runtime. Se è configurato
+//   Vercel Blob (variabile BLOB_READ_WRITE_TOKEN presente, creata in automatico
+//   collegando uno store Blob al progetto da Vercel > Storage) carichiamo lì
+//   e l'immagine resta persistente tra deploy.
+// - In locale (nessun BLOB_READ_WRITE_TOKEN) si continua a salvare su disco in
+//   public/uploads/properties come prima, comodo per lo sviluppo senza dover
+//   configurare nulla di esterno.
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
 
@@ -33,11 +38,18 @@ export async function POST(req: NextRequest) {
 
   const ext = file.type === "image/jpeg" ? "jpg" : file.type.split("/")[1];
   const filename = `${randomUUID()}.${ext}`;
-  const uploadDir = path.join(process.cwd(), "public", "uploads", "properties");
-
-  await mkdir(uploadDir, { recursive: true });
-
   const bytes = Buffer.from(await file.arrayBuffer());
+
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const blob = await put(`properties/${filename}`, bytes, {
+      access: "public",
+      contentType: file.type,
+    });
+    return NextResponse.json({ url: blob.url });
+  }
+
+  const uploadDir = path.join(process.cwd(), "public", "uploads", "properties");
+  await mkdir(uploadDir, { recursive: true });
   await writeFile(path.join(uploadDir, filename), bytes);
 
   return NextResponse.json({ url: `/uploads/properties/${filename}` });
