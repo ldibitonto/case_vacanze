@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // connessione pooled, usata a runtime dall'app
+  directUrl = env("DIRECT_URL")   // connessione diretta, usata solo per le migration
+}
+
+model Property {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  address     String?
+  maxGuests   Int      @default(2)
+  basePrice   Decimal  @db.Decimal(10, 2) // prezzo per notte
+  currency    String   @default("EUR")
+  cin         String?  // Codice Identificativo Nazionale (obbligatorio in Italia)
+  lat         Float?   // geocodificata automaticamente da `address` (vedi src/lib/geocode.ts)
+  lng         Float?
+
+  // Dati "vetrina", gestibili da /admin/properties (vedi src/app/admin/properties).
+  // Per le case seedate prima di questa migrazione, se questi campi sono vuoti
+  // si usa ancora il fallback statico in src/data/propertyExtras.ts.
+  image      String? // foto di copertina: usata da card home, mappa, email
+  images     String[] @default([]) // galleria completa per la pagina dettaglio
+  amenities  String[] @default([])
+  rating     Float    @default(4.8)
+  reviews    Int      @default(0)
+  sqm        Int      @default(50)
+  bedrooms   Int      @default(1) // usato anche dal filtro "Camere da letto" in home
+  bathrooms  Int      @default(1) // usato anche dal filtro "Bagni" in home
+  promotedBy String?
+  cancellationPolicy String @default("Cancellazione gratuita fino a 7 giorni prima dell'arrivo. Dopo questa data, la prima notte non è rimborsabile.")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  bookings       Booking[]
+  blockedDates   BlockedDate[]
+  writtenReviews Review[]
+}
+
+model Booking {
+  id           String        @id @default(cuid())
+  propertyId   String
+  property     Property      @relation(fields: [propertyId], references: [id])
+  guestName    String
+  guestSurname String        @default("")
+  guestEmail   String
+  guestPhone   String        @default("")
+  guestAddress String        @default("") // indirizzo di fatturazione (via, CAP, città, paese uniti in una stringa)
+  guestsCount  Int           @default(1)
+  checkIn      DateTime      @db.Date
+  checkOut     DateTime      @db.Date
+  totalPrice   Decimal       @db.Decimal(10, 2)
+  status       BookingStatus @default(PENDING)
+  paymentRef   String?       // id/reference restituito dal payment provider (mock o reale)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  // Recensione post-soggiorno: l'admin genera reviewToken (link a
+  // /recensione/[token]) solo dopo essersi accertato che il soggiorno sia
+  // concluso. Il token è a uso singolo: viene azzerato non appena la
+  // recensione viene inviata (vedi POST /api/reviews/[token]).
+  reviewToken       String?   @unique
+  reviewRequestedAt DateTime?
+  review            Review?
+
+  @@index([propertyId, checkIn, checkOut])
+}
+
+// Recensione scritta da un ospite dopo il soggiorno, tramite il link
+// ricevuto via email (vedi Booking.reviewToken). Una sola recensione per
+// prenotazione (bookingId unique).
+model Review {
+  id         String   @id @default(cuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
+  bookingId  String   @unique
+  booking    Booking  @relation(fields: [bookingId], references: [id])
+  guestName  String
+  rating     Int // 1-5
+  comment    String
+  createdAt  DateTime @default(now())
+}
+
+enum BookingStatus {
+  PENDING    // prenotazione creata, in attesa di pagamento
+  CONFIRMED  // pagamento confermato
+  CANCELLED  // annullata (timeout pagamento, cancellazione manuale, ecc.)
+}
+
+// Date bloccate manualmente o importate via iCal da Airbnb/Booking.com,
+// per evitare overbooking tra i diversi canali di vendita.
+model BlockedDate {
+  id         String   @id @default(cuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
+  date       DateTime @db.Date
+  source     String   @default("manual") // manual | airbnb-ical | booking-ical
+
+  @@unique([propertyId, date])
+}

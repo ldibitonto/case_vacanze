@@ -1,0 +1,244 @@
+.page {
+  min-height: 100vh;
+  background: #f9fafb;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  color: #1a1a2e;
+  padding: 28px 24px 64px;
+}
+
+.header {
+  max-width: 880px;
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.navLinks {
+  display: flex;
+  gap: 16px;
+}
+
+.backLink {
+  font-size: 13.5px;
+  color: #7c3aed;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.selectorCard {
+  background: #fff;
+  border: 1px solid #f0f0f3;
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+
+.label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #57534e;
+  margin-bottom: 8px;
+}
+
+.select {
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #1a1a2e;
+  background: #fff;
+}
+
+.propertyMeta {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #f0f0f3;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.cardTitle {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+.cardHint {
+  font-size: 12.5px;
+  color: #9ca3af;
+  margin: -8px 0 14px;
+}
+
+.form {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldGroup label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #57534e;
+}
+
+.input {
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  font-size: 14px;
+  color: #1a1a2e;
+}
+
+.primaryBtn {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #7c3aed, #db2777);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+
+.primaryBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid #f0f0f3;
+  font-size: 13.5px;
+}
+
+.rowMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rowTitle {
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.rowSub {
+  color: #9ca3af;
+  font-size: 12.5px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+.badgePending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badgeConfirmed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.secondaryBtn {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1.5px solid #e5e7eb;
+  background: #fff;
+  color: #374151;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.secondaryBtn:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+.dangerBtn {
+  composes: secondaryBtn;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.emptyText {
+  font-size: 13px;
+  color: #9ca3af;
+  margin-top: 12px;
+}
+
+.notice {
+  font-size: 12.5px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 4px;
+}
+
+.noticeError {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.noticeOk {
+  background: #dcfce7;
+  color: #166534;
+}

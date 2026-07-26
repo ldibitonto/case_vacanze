@@ -1,0 +1,368 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.fieldWrap {
+  position: relative;
+  display: flex;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 999px;
+  background: #fff;
+  color: #1a1a2e;
+  min-width: 150px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field:focus-within,
+.fieldActive {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+}
+
+.field svg {
+  color: #8b8b9e;
+  flex-shrink: 0;
+}
+
+.field input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #1a1a2e;
+  width: 100%;
+  background: transparent;
+  cursor: text;
+}
+
+.field input::placeholder {
+  color: #9ca3af;
+}
+
+.location {
+  flex: 1.4;
+  min-width: 180px;
+}
+
+.clearBtn {
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  display: flex;
+  padding: 2px;
+}
+
+.clearBtn:hover {
+  color: #4b5563;
+}
+
+.dates {
+  flex: 1.2;
+  min-width: 220px;
+  gap: 8px;
+}
+
+.datesPlaceholder {
+  color: #1a1a2e;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.dateFieldsRow {
+  display: flex;
+  gap: 6px;
+}
+
+.dateHalf {
+  min-width: 130px;
+  flex: 1;
+}
+
+.dateHalfText {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-size: 12.5px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.dateHalfLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #9ca3af;
+}
+
+.guests {
+  flex: 0.9;
+  color: #1a1a2e;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 18px;
+  border: 1.5px solid #93cceb;
+  border-radius: 999px;
+  background: #fff;
+  color: #0284c7;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filterBtn:hover {
+  background: #e6f4fd;
+}
+
+.filterBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #0284c7;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* --- popup dropdown condiviso (location / date / ospiti) --- */
+
+.popupCard {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 40;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 45px rgba(2, 132, 199, 0.2);
+  border: 1px solid #f0f0f3;
+  padding: 18px 20px;
+  min-width: 300px;
+  cursor: default;
+}
+
+.popupCardWide {
+  padding: 0;
+  min-width: 560px;
+}
+
+.popupSectionTitle {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0 0 8px;
+}
+
+.suggestionList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+
+.suggestionItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  background: transparent;
+  padding: 9px 8px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: #1a1a2e;
+  cursor: pointer;
+  text-align: left;
+}
+
+.suggestionItem:hover {
+  background: #f0f9ff;
+}
+
+.suggestionItem svg {
+  color: #78716c;
+  flex-shrink: 0;
+}
+
+.suggestionSub {
+  margin-left: auto;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* --- popup ospiti --- */
+
+.guestRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f3;
+  min-width: 260px;
+}
+
+.guestRow:last-of-type {
+  border-bottom: none;
+}
+
+.guestLabel {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.guestSublabel {
+  font-size: 11.5px;
+  color: #9ca3af;
+  margin: 2px 0 0;
+}
+
+.guestLabelRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #57534e;
+}
+
+.addBtn {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1.5px solid #0284c7;
+  background: #fff;
+  color: #0284c7;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.addBtn:hover {
+  background: #e6f4fd;
+}
+
+.stepperControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stepperBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid #93cceb;
+  background: #fff;
+  color: #0284c7;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepperBtn:hover:not(:disabled) {
+  background: #e6f4fd;
+}
+
+.stepperBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.stepperValue {
+  min-width: 16px;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.toggle {
+  width: 40px;
+  height: 24px;
+  border-radius: 999px;
+  border: none;
+  background: #e5e7eb;
+  cursor: pointer;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  transition: background 0.15s ease;
+}
+
+.toggleOn {
+  background: #0284c7;
+}
+
+.toggleKnob {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  display: block;
+  transition: transform 0.15s ease;
+}
+
+.toggleOn .toggleKnob {
+  transform: translateX(16px);
+}
+
+.popupFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f3;
+}
+
+.clearLinkBtn {
+  border: none;
+  background: transparent;
+  color: #57534e;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.closeBtn {
+  height: 38px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #38bdf8, #0284c7);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
