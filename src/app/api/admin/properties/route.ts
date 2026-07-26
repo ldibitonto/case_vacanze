@@ -3,6 +3,11 @@ import { prisma } from "@/lib/db";
 import { slugify } from "@/lib/slugify";
 import { uniqueSlug } from "@/lib/properties";
 
+// Sempre dinamica, stesso motivo di /api/properties: nessun parametro
+// Request qui dentro la renderebbe "static-eligible" per Next.js, che la
+// congelerebbe in fase di build invece di leggere il DB ad ogni richiesta.
+export const dynamic = "force-dynamic";
+
 // GET /api/admin/properties — elenco completo per la UI di /admin/properties
 export async function GET() {
   const properties = await prisma.property.findMany({ orderBy: { createdAt: "desc" } });

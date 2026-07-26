@@ -5,6 +5,12 @@ import { buildDisplayProperty, FALLBACK_COORDS } from "@/data/propertyExtras";
 import { geocodeSequentially } from "@/lib/geocode";
 import { getReviewAggregates, withReviewAggregate } from "@/lib/reviews";
 
+// Pagina sempre dinamica: legge dal DB in tempo reale (disponibilità, case
+// aggiunte in admin, recensioni appena arrivate...). Senza questa riga
+// Next.js proverebbe a generarla come pagina statica in fase di build,
+// congelando i dati al momento del deploy invece di mostrarli aggiornati.
+export const dynamic = "force-dynamic";
+
 // Homepage con layout ispirato ai portali di case vacanze (stile HomeToGo).
 // I dati vengono letti dal DB reale (Prisma) e arricchiti con gli extra
 // visivi (foto, amenità, rating...) definiti in src/data/propertyExtras.ts,
