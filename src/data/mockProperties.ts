@@ -51,6 +51,7 @@ export type Property = {
 
 export const mockProperties: Property[] = [
   {
+    
     id: "1",
     slug: "casa-piscina-sicilia",
     title: "Casa con piscina privata, barbecue e terrazza | Vista sul mare",
