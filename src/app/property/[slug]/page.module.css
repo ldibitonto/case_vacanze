@@ -318,6 +318,11 @@
 }
 
 .mapWrap {
+  /* Contiene i z-index interni di Leaflet (fino a ~700-1000) in un proprio
+     stacking context, così non competono più con popup/menu del resto
+     della pagina (es. widget di prenotazione) e non li coprono. */
+  position: relative;
+  z-index: 0;
   width: 100%;
   height: 320px;
   border-radius: 14px;
@@ -463,12 +468,33 @@
   color: #78716c;
 }
 
+.widgetDatesWrap {
+  position: relative;
+}
+
 .widgetDates {
   display: grid;
   grid-template-columns: 1fr 1fr;
   border: 1.5px solid #d1d5db;
   border-radius: 10px;
   overflow: hidden;
+  cursor: pointer;
+}
+
+.widgetDatesActive {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.14);
+}
+
+.widgetDatesPopup {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 500;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 45px rgba(2, 132, 199, 0.2);
+  border: 1px solid #f0f0f3;
 }
 
 .widgetDateField {
@@ -476,6 +502,8 @@
   flex-direction: column;
   padding: 8px 10px;
   gap: 2px;
+  font-size: 13.5px;
+  color: #1a1a2e;
 }
 
 .widgetDateField:first-child {
@@ -735,5 +763,19 @@
   }
   .lightboxImage {
     max-height: 56vh;
+  }
+
+  /* Il calendario del widget prenotazione, come quello della home, va
+     "sganciato" dal campo su schermi stretti: da absolute a fixed con
+     larghezza legata al viewport, altrimenti sporgerebbe dal bordo. */
+  .widgetDatesPopup {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: 12px;
+    width: auto;
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
   }
 }

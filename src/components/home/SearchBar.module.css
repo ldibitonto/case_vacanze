@@ -156,7 +156,10 @@
   position: absolute;
   top: calc(100% + 10px);
   left: 0;
-  z-index: 40;
+  /* Alto abbastanza da restare sempre sopra ai pannelli interni di
+     Leaflet (che arrivano fino a ~700-1000 se non contenuti) e a
+     qualunque altro contenuto della pagina. */
+  z-index: 500;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 20px 45px rgba(2, 132, 199, 0.2);
@@ -426,7 +429,7 @@
     max-width: none;
     max-height: calc(100vh - 140px);
     overflow-y: auto;
-    z-index: 45;
+    z-index: 500;
   }
 
   .guestRow {

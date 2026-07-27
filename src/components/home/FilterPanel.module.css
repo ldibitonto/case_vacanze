@@ -6,7 +6,7 @@
   align-items: flex-start;
   justify-content: center;
   padding: 40px 16px;
-  z-index: 60;
+  z-index: 600;
   overflow-y: auto;
 }
 

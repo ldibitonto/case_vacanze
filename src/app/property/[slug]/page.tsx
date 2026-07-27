@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import { MapPreview } from "@/components/home/MapPreview";
+import { DateRangePicker } from "@/components/home/DateRangePicker";
 import { amenityIcon, StarIcon } from "@/components/home/icons";
 import { buildDisplayProperty } from "@/data/propertyExtras";
 import { AMENITY_LABELS, amenityGroups } from "@/data/amenities";
@@ -93,6 +94,19 @@ function PropertyDetailContent() {
   const [checking, setChecking] = useState(false);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [datesOpen, setDatesOpen] = useState(false);
+  const datesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!datesOpen) return;
+    function handleClickOutside(e: MouseEvent) {
+      if (datesRef.current && !datesRef.current.contains(e.target as Node)) {
+        setDatesOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [datesOpen]);
 
   useEffect(() => {
     fetch("/api/properties")
@@ -485,27 +499,34 @@ function PropertyDetailContent() {
               <span className={styles.widgetPriceUnit}>/ notte</span>
             </div>
 
-            <div className={styles.widgetDates}>
-              <div className={styles.widgetDateField}>
-                <span className={styles.widgetDateLabel}>Arrivo</span>
-                <input
-                  type="date"
-                  className={styles.widgetDateInput}
-                  value={checkIn}
-                  max={checkOut || undefined}
-                  onChange={(e) => setCheckIn(e.target.value)}
-                />
+            <div className={styles.widgetDatesWrap} ref={datesRef}>
+              <div
+                className={`${styles.widgetDates} ${datesOpen ? styles.widgetDatesActive : ""}`}
+                onClick={() => setDatesOpen(true)}
+              >
+                <div className={styles.widgetDateField}>
+                  <span className={styles.widgetDateLabel}>Arrivo</span>
+                  <span>{checkIn ? new Date(checkIn).toLocaleDateString("it-IT") : "Aggiungi data"}</span>
+                </div>
+                <div className={styles.widgetDateField}>
+                  <span className={styles.widgetDateLabel}>Partenza</span>
+                  <span>{checkOut ? new Date(checkOut).toLocaleDateString("it-IT") : "Aggiungi data"}</span>
+                </div>
               </div>
-              <div className={styles.widgetDateField}>
-                <span className={styles.widgetDateLabel}>Partenza</span>
-                <input
-                  type="date"
-                  className={styles.widgetDateInput}
-                  value={checkOut}
-                  min={checkIn || undefined}
-                  onChange={(e) => setCheckOut(e.target.value)}
-                />
-              </div>
+
+              {datesOpen && (
+                <div className={styles.widgetDatesPopup}>
+                  <DateRangePicker
+                    checkIn={checkIn}
+                    checkOut={checkOut}
+                    onChange={(ci, co) => {
+                      setCheckIn(ci);
+                      setCheckOut(co);
+                    }}
+                    onClose={() => setDatesOpen(false)}
+                  />
+                </div>
+              )}
             </div>
 
             <div className={styles.widgetGuests}>

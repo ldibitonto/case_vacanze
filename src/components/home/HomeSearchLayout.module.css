@@ -125,6 +125,13 @@
   top: 88px;
   height: calc(100vh - 110px);
   min-height: 480px;
+  /* Leaflet imposta al suo interno z-index molto alti (i vari pannelli
+     tile/overlay/marker/popup arrivano fino a ~700-1000). Senza un proprio
+     contesto di stacking, questi valori competono direttamente con quelli
+     dell'header/popup altrove in pagina e vincono, "mangiando"
+     visivamente i menu a tendina aperti sopra la mappa. z-index:0 qui
+     crea un contesto che li contiene, senza alterarne l'aspetto. */
+  z-index: 0;
 }
 
 @media (max-width: 1080px) {
@@ -132,8 +139,11 @@
     grid-template-columns: 1fr;
   }
   .mapCol {
-    position: static;
+    /* relative (non static) per mantenere il contenimento z-index dei
+       pannelli Leaflet anche quando la mappa non è più sticky. */
+    position: relative;
     height: 360px;
+    z-index: 0;
   }
   .header {
     flex-wrap: wrap;
