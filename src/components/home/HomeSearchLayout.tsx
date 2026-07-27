@@ -215,6 +215,7 @@ export function HomeSearchLayout({
                   property={p}
                   checkIn={datesSelected ? checkIn : undefined}
                   checkOut={datesSelected ? checkOut : undefined}
+                  guests={filters.adults + filters.children > 0 ? filters.adults + filters.children : undefined}
                 />
               </div>
             ))}

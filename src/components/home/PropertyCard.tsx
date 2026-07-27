@@ -10,20 +10,29 @@ export function PropertyCard({
   property,
   checkIn,
   checkOut,
+  guests,
 }: {
   property: Property;
   checkIn?: string;
   checkOut?: string;
+  guests?: number;
 }) {
   const [saved, setSaved] = useState(false);
 
-  // Portiamo le date scelte nella home alla pagina di prenotazione solo se
-  // l'utente le ha effettivamente selezionate: altrimenti il form di
-  // prenotazione parte vuoto, senza date precompilate a caso.
-  const offerHref =
-    checkIn && checkOut
-      ? `/property/${property.slug}?checkIn=${checkIn}&checkOut=${checkOut}`
-      : `/property/${property.slug}`;
+  // Portiamo date e numero ospiti scelti nella home alla pagina della casa
+  // solo se l'utente li ha effettivamente selezionati: altrimenti il
+  // widget di prenotazione parte vuoto/con 1 ospite invece di ripartire da
+  // zero senza motivo.
+  const offerParams = new URLSearchParams();
+  if (checkIn && checkOut) {
+    offerParams.set("checkIn", checkIn);
+    offerParams.set("checkOut", checkOut);
+  }
+  if (guests && guests > 0) {
+    offerParams.set("guests", String(guests));
+  }
+  const offerQuery = offerParams.toString();
+  const offerHref = `/property/${property.slug}${offerQuery ? `?${offerQuery}` : ""}`;
 
   return (
     <article className={styles.card}>
