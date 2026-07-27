@@ -220,6 +220,19 @@
   flex-shrink: 0;
 }
 
+.suggestionText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.suggestionDetail {
+  font-size: 13px;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
 .suggestionSub {
   margin-left: auto;
   font-size: 13px;
@@ -379,6 +392,37 @@
   cursor: pointer;
 }
 
+/* Intestazione dei popup (chiudi/indietro + titolo): nascosta su desktop,
+   diventa visibile solo nella versione a tutto schermo mobile qui sotto —
+   stessa struttura vista nel video di riferimento ("Destinazione",
+   "Ospiti", intervallo date scelto). */
+.popupHeader {
+  display: none;
+}
+
+.popupHeaderBtn {
+  border: none;
+  background: #f1f5f9;
+  color: #1a1a2e;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.popupHeaderTitle {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0;
+}
+
 /* --- responsive: tablet/mobile ---
    Sotto i 900px i campi (località/date/ospiti) e il pulsante filtro vanno
    in colonna, a tutta larghezza, invece di restare fianco a fianco con i
@@ -422,23 +466,45 @@
 }
 
 @media (max-width: 640px) {
-  /* Ancorato in basso (stile "bottom sheet") invece che sotto il campo:
-     con l'header impilato su più righe la sua altezza varia troppo per
-     calcolare un "top" affidabile, mentre il fondo dello schermo è un
-     riferimento stabile e resta comunque raggiungibile col pollice. */
+  /* A tutto schermo, come nel riferimento (destinazione/date/ospiti
+     aprono ciascuna una "pagina" dedicata su mobile, non un piccolo
+     dropdown): con l'header impilato su più righe la sua altezza varia
+     troppo per ancorarci sotto un dropdown in modo affidabile, e un
+     popup piccolo su un telefono è comunque scomodo da usare. */
   .popupCard,
   .popupCardWide {
     position: fixed;
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-    top: auto;
-    width: auto;
+    inset: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
     min-width: 0;
     max-width: none;
-    max-height: calc(100vh - 140px);
+    max-height: none;
+    border-radius: 0;
+    box-shadow: none;
     overflow-y: auto;
     z-index: 500;
+  }
+
+  .popupCard {
+    padding: 16px 20px 32px;
+  }
+
+  /* .popupCardWide (date) resta a padding 0: il contenuto interno
+     (DateRangePicker) gestisce già il proprio padding. */
+  .popupHeader {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .popupCardWide .popupHeader {
+    padding: 16px 20px 0;
+    margin-bottom: 20px;
   }
 
   .guestRow {

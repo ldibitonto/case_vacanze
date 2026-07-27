@@ -108,16 +108,75 @@ export function SearchBar({
 
   const query = normalize(location);
   const isSearching = query !== "" && query !== "italia";
-  const filteredSuggestions = useMemo(() => {
+  const localSuggestions = useMemo(() => {
     if (!isSearching) return [];
     // "Inizia con" sull'intera opzione o su una qualsiasi delle sue parole,
     // così digitando "pu" esce sia "Puglia" sia "Otranto, Puglia" (comprese
-    // provincia/regione, che fanno parte della stessa etichetta).
+    // provincia/regione, che fanno parte della stessa etichetta). Sono le
+    // nostre destinazioni note (case vere in database + regioni/nazione):
+    // compaiono per prime perché garantiscono risultati effettivi.
     return allLocationOptions.filter((v) => {
       const words = normalize(v).split(/[^a-z0-9]+/).filter(Boolean);
       return words.some((w) => w.startsWith(query));
     });
   }, [allLocationOptions, isSearching, query]);
+
+  // Suggerimenti "veri" (città/paesi/frazioni con provincia e regione),
+  // presi da Nominatim/OpenStreetMap tramite il nostro proxy server-side
+  // (stesso servizio già usato per geocodificare gli indirizzi delle case),
+  // così anche una destinazione non ancora presente tra le nostre case
+  // (es. "Verona") compare comunque nel menu, con tutti i dettagli.
+  const [geoSuggestions, setGeoSuggestions] = useState<
+    { label: string; sublabel: string }[]
+  >([]);
+  const [geoLoading, setGeoLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isSearching) {
+      setGeoSuggestions([]);
+      return;
+    }
+    const controller = new AbortController();
+    setGeoLoading(true);
+    const timer = setTimeout(() => {
+      fetch(`/api/geocode/suggest?q=${encodeURIComponent(location.trim())}`, {
+        signal: controller.signal,
+      })
+        .then((res) => res.json())
+        .then((data: { results?: { label: string; sublabel: string }[] }) => {
+          setGeoSuggestions(data.results ?? []);
+        })
+        .catch((err) => {
+          if (err.name !== "AbortError") setGeoSuggestions([]);
+        })
+        .finally(() => setGeoLoading(false));
+    }, 350); // debounce: non un fetch a ogni singolo tasto premuto
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [isSearching, location]);
+
+  // Lista unica mostrata nel popup: prima le nostre destinazioni note
+  // (istantanee), poi quelle "vere" trovate dal geocoder, senza doppioni.
+  const suggestions = useMemo(() => {
+    const seen = new Set<string>();
+    const out: { label: string; sublabel: string }[] = [];
+    for (const v of localSuggestions) {
+      const key = normalize(v);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ label: v, sublabel: "" });
+    }
+    for (const g of geoSuggestions) {
+      const key = normalize(g.label);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(g);
+    }
+    return out;
+  }, [localSuggestions, geoSuggestions]);
 
   useEffect(() => {
     setRecentSearches(loadRecentSearches());
@@ -197,24 +256,42 @@ export function SearchBar({
 
         {openPopup === "location" && (
           <div className={styles.popupCard}>
+            <div className={styles.popupHeader}>
+              <button
+                type="button"
+                className={styles.popupHeaderBtn}
+                aria-label="Chiudi"
+                onClick={() => setOpenPopup(null)}
+              >
+                ✕
+              </button>
+              <p className={styles.popupHeaderTitle}>Destinazione</p>
+            </div>
             {isSearching ? (
-              filteredSuggestions.length > 0 ? (
+              suggestions.length > 0 ? (
                 <>
                   <p className={styles.popupSectionTitle}>Suggerimenti</p>
                   <div className={styles.suggestionList}>
-                    {filteredSuggestions.map((v) => (
+                    {suggestions.map((s, i) => (
                       <button
-                        key={v}
+                        key={`${s.label}-${i}`}
                         type="button"
                         className={styles.suggestionItem}
-                        onClick={() => commitLocation(v)}
+                        onClick={() => commitLocation(s.label)}
                       >
                         <PinIcon size={15} />
-                        {v}
+                        <span className={styles.suggestionText}>
+                          {s.label}
+                          {s.sublabel && (
+                            <span className={styles.suggestionDetail}>{s.sublabel}</span>
+                          )}
+                        </span>
                       </button>
                     ))}
                   </div>
                 </>
+              ) : geoLoading ? (
+                <p className={styles.popupSectionTitle}>Ricerca in corso...</p>
               ) : (
                 <p className={styles.popupSectionTitle}>Nessun suggerimento per &quot;{location}&quot;</p>
               )
@@ -299,6 +376,17 @@ export function SearchBar({
 
         {openPopup === "dates" && (
           <div className={`${styles.popupCard} ${styles.popupCardWide}`}>
+            <div className={styles.popupHeader}>
+              <button
+                type="button"
+                className={styles.popupHeaderBtn}
+                aria-label="Indietro"
+                onClick={() => setOpenPopup(null)}
+              >
+                ←
+              </button>
+              <p className={styles.popupHeaderTitle}>{datesSummary || "Scegli le date"}</p>
+            </div>
             <DateRangePicker
               checkIn={checkIn}
               checkOut={checkOut}
@@ -322,6 +410,17 @@ export function SearchBar({
 
         {openPopup === "guests" && (
           <div className={styles.popupCard}>
+            <div className={styles.popupHeader}>
+              <button
+                type="button"
+                className={styles.popupHeaderBtn}
+                aria-label="Indietro"
+                onClick={() => setOpenPopup(null)}
+              >
+                ←
+              </button>
+              <p className={styles.popupHeaderTitle}>Ospiti</p>
+            </div>
             <div className={styles.guestRow}>
               <div>
                 <p className={styles.guestLabel}>Adulti</p>
