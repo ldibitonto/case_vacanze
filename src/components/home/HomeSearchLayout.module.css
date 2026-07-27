@@ -142,6 +142,12 @@
 
 @media (max-width: 900px) {
   .header {
+    /* Sotto i 900px la barra di ricerca va in colonna (vedi
+       SearchBar.module.css) e l'header diventa molto più alto: se resta
+       "sticky" occupa in modo permanente gran parte dello schermo e allo
+       scroll copre/inghiotte l'elenco delle case sotto di sé. Su mobile lo
+       lasciamo scorrere via normalmente con il resto della pagina. */
+    position: static;
     padding: 12px 16px;
     gap: 12px;
   }

@@ -38,6 +38,12 @@
 }
 
 .summary {
+  /* min-width:0 è essenziale qui: senza, una stringa lunga e senza spazi
+     (es. un indirizzo email) nel contenuto obbliga la colonna della grid
+     a essere larga almeno quanto il suo min-content, "scoppiando" fuori
+     dalla larghezza di .card e portando tutta la pagina in scroll
+     orizzontale su mobile (il bug degli screenshot). */
+  min-width: 0;
   background: linear-gradient(160deg, #7dd3fc 0%, #38bdf8 55%, #0284c7 100%);
   color: #fff;
   padding: 36px 32px;
@@ -59,11 +65,13 @@
   font-weight: 700;
   line-height: 1.35;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .summaryRow {
   display: flex;
   justify-content: space-between;
+  gap: 12px;
   font-size: 13.5px;
   padding: 10px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.25);
@@ -71,6 +79,12 @@
 
 .summaryRow span:first-child {
   opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.summaryRow span:last-child {
+  overflow-wrap: anywhere;
+  text-align: right;
 }
 
 .totalRow {
@@ -80,6 +94,7 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  gap: 12px;
 }
 
 .totalLabel {
@@ -90,6 +105,8 @@
 .totalAmount {
   font-size: 30px;
   font-weight: 800;
+  overflow-wrap: anywhere;
+  text-align: right;
 }
 
 .secureNote {
@@ -101,6 +118,7 @@
 }
 
 .form {
+  min-width: 0;
   padding: 36px 32px;
   display: flex;
   flex-direction: column;
@@ -289,5 +307,24 @@
   }
   .summary {
     order: -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 20px 12px 48px;
+  }
+  .summary,
+  .form {
+    padding: 24px 18px;
+  }
+  .totalAmount {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 380px) {
+  .row2 {
+    grid-template-columns: 1fr;
   }
 }
