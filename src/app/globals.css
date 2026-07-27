@@ -1,0 +1,21 @@
+/* Reset di base condiviso da tutto il sito. Mancava completamente: senza
+   box-sizing:border-box, qualunque elemento con padding/border + una
+   larghezza fissa (min-width, width, max-width) calcola le proprie
+   dimensioni sommando il padding, finendo per traboccare dal contenitore.
+   Su schermi stretti (mobile/tablet) questo causa scroll orizzontale e
+   sovrapposizioni impreviste tra i blocchi del layout. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}

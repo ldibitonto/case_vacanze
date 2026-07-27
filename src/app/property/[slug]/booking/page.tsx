@@ -343,16 +343,29 @@ function BookingPageContent() {
                   <label className={styles.label} htmlFor="guestsCount">
                     Numero di persone <span className={styles.required}>*</span>
                   </label>
-                  <input
-                    id="guestsCount"
-                    type="number"
-                    min={1}
-                    max={property?.maxGuests ?? undefined}
-                    className={styles.input}
-                    value={guestsCount}
-                    onChange={(e) => setGuestsCount(Number(e.target.value) || 1)}
-                    required
-                  />
+                  <div className={styles.stepperField} id="guestsCount">
+                    <button
+                      type="button"
+                      className={styles.stepperBtn}
+                      disabled={guestsCount <= 1}
+                      onClick={() => setGuestsCount(Math.max(1, guestsCount - 1))}
+                      aria-label="Diminuisci numero di persone"
+                    >
+                      −
+                    </button>
+                    <span className={styles.stepperValue}>{guestsCount}</span>
+                    <button
+                      type="button"
+                      className={styles.stepperBtn}
+                      disabled={Boolean(property?.maxGuests) && guestsCount >= (property?.maxGuests ?? Infinity)}
+                      onClick={() =>
+                        setGuestsCount(Math.min(property?.maxGuests ?? Infinity, guestsCount + 1))
+                      }
+                      aria-label="Aumenta numero di persone"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
                 <div />
               </div>
@@ -408,7 +421,7 @@ function BookingPageContent() {
           ) : property ? (
             <>
               <div className={styles.recapHeader}>
-                <div>
+                <div className={styles.recapHeaderText}>
                   <p className={styles.recapMeta}>
                     {property.sqm} m² casa vacanza · {property.maxGuests} ospiti
                   </p>

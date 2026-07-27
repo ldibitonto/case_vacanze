@@ -510,14 +510,27 @@ function PropertyDetailContent() {
 
             <div className={styles.widgetGuests}>
               <span className={styles.widgetDateLabel}>Ospiti</span>
-              <input
-                type="number"
-                min={1}
-                max={property.maxGuests}
-                className={styles.widgetGuestsInput}
-                value={guests}
-                onChange={(e) => setGuests(Number(e.target.value) || 1)}
-              />
+              <div className={styles.widgetGuestsStepper}>
+                <button
+                  type="button"
+                  className={styles.widgetStepperBtn}
+                  disabled={guests <= 1}
+                  onClick={() => setGuests(Math.max(1, guests - 1))}
+                  aria-label="Diminuisci numero di ospiti"
+                >
+                  −
+                </button>
+                <span className={styles.widgetGuestsValue}>{guests}</span>
+                <button
+                  type="button"
+                  className={styles.widgetStepperBtn}
+                  disabled={guests >= property.maxGuests}
+                  onClick={() => setGuests(Math.min(property.maxGuests, guests + 1))}
+                  aria-label="Aumenta numero di ospiti"
+                >
+                  +
+                </button>
+              </div>
             </div>
 
             {widgetError && <p className={styles.widgetError}>{widgetError}</p>}

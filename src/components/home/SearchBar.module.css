@@ -366,3 +366,70 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+/* --- responsive: tablet/mobile ---
+   Sotto i 900px i campi (località/date/ospiti) e il pulsante filtro vanno
+   in colonna, a tutta larghezza, invece di restare fianco a fianco con i
+   loro min-width fissi: sono proprio quei min-width (150-220px ciascuno)
+   a non entrare nell'header su schermi stretti e a farlo traboccare sopra
+   elenco e mappa. I popup (località/date/ospiti) passano da "absolute"
+   ancorato al campo a "fixed" con larghezza legata al viewport, così non
+   sporgono mai oltre il bordo dello schermo. */
+
+@media (max-width: 900px) {
+  .bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .fieldWrap {
+    width: 100%;
+  }
+
+  .field {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .location,
+  .dates,
+  .guests {
+    flex: none;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .dateFieldsRow {
+    width: 100%;
+  }
+
+  .filterBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Ancorato in basso (stile "bottom sheet") invece che sotto il campo:
+     con l'header impilato su più righe la sua altezza varia troppo per
+     calcolare un "top" affidabile, mentre il fondo dello schermo è un
+     riferimento stabile e resta comunque raggiungibile col pollice. */
+  .popupCard,
+  .popupCardWide {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    top: auto;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    z-index: 45;
+  }
+
+  .guestRow {
+    min-width: 0;
+  }
+}

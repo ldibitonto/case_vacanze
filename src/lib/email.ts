@@ -35,10 +35,10 @@ function buildHtml(params: BookingConfirmationEmailParams & { imageSrc: string }
   } = params;
 
   return `
-  <div style="font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #f0f9ff; padding: 24px;">
+  <div style="font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #f0f9ff; padding: 24px; box-sizing: border-box;">
     <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(2, 132, 199, 0.15);">
-      <img src="${imageSrc}" alt="${propertyName}" style="width: 100%; height: 220px; object-fit: cover; display: block;" />
-      <div style="padding: 28px 28px 32px;">
+      <img src="${imageSrc}" alt="${propertyName}" width="480" height="220" style="width: 100%; max-width: 100%; height: 220px; object-fit: cover; object-position: center; display: block;" />
+      <div style="padding: 28px 28px 32px; box-sizing: border-box;">
         <p style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #0284c7; margin: 0 0 6px;">
           Prenotazione confermata
         </p>
@@ -93,9 +93,9 @@ function buildReviewRequestHtml(params: ReviewRequestEmailParams) {
   const { guestName, propertyName, checkIn, checkOut, reviewUrl } = params;
 
   return `
-  <div style="font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #f0f9ff; padding: 24px;">
+  <div style="font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #f0f9ff; padding: 24px; box-sizing: border-box;">
     <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(2, 132, 199, 0.15);">
-      <div style="padding: 32px 28px;">
+      <div style="padding: 32px 28px; box-sizing: border-box;">
         <p style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #0284c7; margin: 0 0 6px;">
           Com'è andato il tuo soggiorno?
         </p>
