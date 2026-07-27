@@ -423,6 +423,13 @@
   margin: 0;
 }
 
+/* Campo di ricerca duplicato dentro il popup località a tutto schermo
+   (mobile): nascosto di default, visibile solo sotto i 640px insieme al
+   resto del layout a tutto schermo (vedi media query più sotto). */
+.mobileSearchField {
+  display: none;
+}
+
 /* --- responsive: tablet/mobile ---
    Sotto i 900px i campi (località/date/ospiti) e il pulsante filtro vanno
    in colonna, a tutta larghezza, invece di restare fianco a fianco con i
@@ -505,6 +512,33 @@
   .popupCardWide .popupHeader {
     padding: 16px 20px 0;
     margin-bottom: 20px;
+  }
+
+  .mobileSearchField {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 52px;
+    padding: 0 16px;
+    margin-bottom: 20px;
+    border: 1.5px solid #93cceb;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .mobileSearchField svg {
+    color: #8b8b9e;
+    flex-shrink: 0;
+  }
+
+  .mobileSearchField input {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1a1a2e;
+    width: 100%;
+    background: transparent;
   }
 
   .guestRow {

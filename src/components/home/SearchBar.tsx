@@ -267,6 +267,33 @@ export function SearchBar({
               </button>
               <p className={styles.popupHeaderTitle}>Destinazione</p>
             </div>
+            {/* Su mobile il popup è a tutto schermo e copre il campo
+                originale nell'header: senza un campo qui dentro, quello
+                che si digita resta nascosto sotto il popup stesso. Su
+                desktop è nascosto via CSS (il campo nell'header resta
+                visibile sopra il dropdown). */}
+            <div className={styles.mobileSearchField}>
+              <PinIcon size={16} />
+              <input
+                autoFocus
+                value={location}
+                onChange={(e) => onChangeLocation(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") commitLocation(location);
+                }}
+                placeholder="Dove vuoi andare?"
+              />
+              {location && (
+                <button
+                  type="button"
+                  className={styles.clearBtn}
+                  aria-label="Cancella"
+                  onClick={() => onChangeLocation("")}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
             {isSearching ? (
               suggestions.length > 0 ? (
                 <>
