@@ -156,9 +156,22 @@ function BookingPageContent() {
     }
   }
 
+  // Le date (e gli ospiti) arrivano dalla home/pagina casa via query string;
+  // il link "torna indietro" deve riportarle con sé, altrimenti si ritrova
+  // sulla pagina della casa senza date selezionate, come se si ricominciasse
+  // da capo.
+  const backToPropertyHref = (() => {
+    const qs = new URLSearchParams();
+    if (checkIn) qs.set("checkIn", checkIn);
+    if (checkOut) qs.set("checkOut", checkOut);
+    if (guestsCount > 1) qs.set("guests", String(guestsCount));
+    const query = qs.toString();
+    return `/property/${params.slug}${query ? `?${query}` : ""}`;
+  })();
+
   return (
     <main className={styles.page}>
-      <a href={`/property/${params.slug}`} className={styles.backLink}>
+      <a href={backToPropertyHref} className={styles.backLink}>
         ← Torna alla casa
       </a>
 

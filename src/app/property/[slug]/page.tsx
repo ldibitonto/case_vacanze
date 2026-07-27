@@ -269,10 +269,18 @@ function PropertyDetailContent() {
     );
   }
 
+  const backToHomeHref = (() => {
+    const qs = new URLSearchParams();
+    if (checkIn) qs.set("checkIn", checkIn);
+    if (checkOut) qs.set("checkOut", checkOut);
+    const query = qs.toString();
+    return `/${query ? `?${query}` : ""}`;
+  })();
+
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        <a href="/" className={styles.backLink}>
+        <a href={backToHomeHref} className={styles.backLink}>
           ← Torna alla ricerca
         </a>
 

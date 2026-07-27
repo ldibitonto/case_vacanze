@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { prisma } from "@/lib/db";
 import { HomeSearchLayout } from "@/components/home/HomeSearchLayout";
 import { mockProperties } from "@/data/mockProperties";
@@ -74,9 +75,11 @@ export default async function HomePage() {
       : mockProperties;
 
   return (
-    <HomeSearchLayout
-      properties={properties}
-      source={dbProperties.length > 0 ? "db" : "mock"}
-    />
+    <Suspense fallback={null}>
+      <HomeSearchLayout
+        properties={properties}
+        source={dbProperties.length > 0 ? "db" : "mock"}
+      />
+    </Suspense>
   );
 }

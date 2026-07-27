@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import styles from "./HomeSearchLayout.module.css";
 import { SearchBar } from "./SearchBar";
 import { PropertyCard } from "./PropertyCard";
@@ -37,10 +38,15 @@ export function HomeSearchLayout({
   properties: Property[];
   source?: "db" | "mock";
 }) {
+  // Se si arriva qui da un link "torna indietro" (pagina casa/prenotazione)
+  // che portava con sé le date scelte, le recuperiamo dalla query string
+  // invece di ripartire sempre da zero: altrimenti tornare indietro dà
+  // l'impressione che le date selezionate siano andate perse.
+  const searchParams = useSearchParams();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [location, setLocation] = useState("Italia");
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
+  const [checkIn, setCheckIn] = useState(searchParams.get("checkIn") ?? "");
+  const [checkOut, setCheckOut] = useState(searchParams.get("checkOut") ?? "");
   const [availableIds, setAvailableIds] = useState<Set<string> | null>(null);
   const [checking, setChecking] = useState(false);
   const [dateError, setDateError] = useState<string | null>(null);
