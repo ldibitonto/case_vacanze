@@ -15,8 +15,8 @@
   max-width: 920px;
   width: 100%;
   margin: 0 auto 20px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: #0369a1;
   text-decoration: none;
 }
@@ -61,8 +61,8 @@
 }
 
 .summaryTitle {
-  font-size: 19px;
-  font-weight: 700;
+  font-size: 21px;
+  font-weight: 800;
   line-height: 1.35;
   margin: 0;
   overflow-wrap: anywhere;
@@ -72,7 +72,8 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  font-size: 13.5px;
+  font-size: 14.5px;
+  font-weight: 500;
   padding: 10px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.25);
 }
@@ -98,12 +99,13 @@
 }
 
 .totalLabel {
-  font-size: 13.5px;
+  font-size: 14.5px;
+  font-weight: 600;
   opacity: 0.85;
 }
 
 .totalAmount {
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 800;
   overflow-wrap: anywhere;
   text-align: right;
@@ -126,14 +128,14 @@
 }
 
 .formTitle {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 21px;
+  font-weight: 800;
   margin: 0 0 4px;
   color: #0c4a6e;
 }
 
 .formSubtitle {
-  font-size: 13px;
+  font-size: 14px;
   color: #64748b;
   margin: 0 0 8px;
 }
@@ -145,17 +147,18 @@
 }
 
 .label {
-  font-size: 12.5px;
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 700;
   color: #475569;
 }
 
 .input {
-  height: 46px;
+  height: 48px;
   padding: 0 14px;
   border-radius: 10px;
   border: 1.5px solid #e2e8f0;
-  font-size: 14.5px;
+  font-size: 16px;
+  font-weight: 500;
   color: #0c4a6e;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -196,12 +199,12 @@
 
 .payBtn {
   margin-top: 8px;
-  height: 50px;
+  height: 52px;
   border: none;
   border-radius: 999px;
   background: linear-gradient(135deg, #38bdf8, #0284c7);
   color: #fff;
-  font-size: 15px;
+  font-size: 16.5px;
   font-weight: 700;
   cursor: pointer;
   letter-spacing: 0.01em;
@@ -250,14 +253,14 @@
 }
 
 .statusHeading {
-  font-size: 19px;
-  font-weight: 700;
+  font-size: 21px;
+  font-weight: 800;
   color: #0c4a6e;
   margin: 0;
 }
 
 .statusSubtext {
-  font-size: 14px;
+  font-size: 15px;
   color: #64748b;
   max-width: 360px;
 }
@@ -289,14 +292,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 46px;
-  padding: 0 24px;
+  height: 48px;
+  padding: 0 26px;
   border-radius: 999px;
   border: none;
   background: linear-gradient(135deg, #38bdf8, #0284c7);
   color: #fff;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   text-decoration: none;
   cursor: pointer;
 }

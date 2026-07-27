@@ -16,8 +16,8 @@
 .backLink {
   display: inline-block;
   margin-bottom: 16px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: #0284c7;
   text-decoration: none;
 }
@@ -120,7 +120,7 @@
 }
 
 .title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 800;
   margin: 0 0 8px;
 }
@@ -130,7 +130,8 @@
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
-  font-size: 14px;
+  font-size: 15.5px;
+  font-weight: 500;
   color: #57534e;
   margin-bottom: 24px;
 }
@@ -157,8 +158,8 @@
   border: none;
   background: transparent;
   padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15.5px;
+  font-weight: 700;
   color: #78716c;
   cursor: pointer;
   white-space: nowrap;
@@ -176,15 +177,15 @@
 }
 
 .tabPanel {
-  font-size: 14.5px;
+  font-size: 16px;
   line-height: 1.7;
   color: #3f3f46;
   min-height: 120px;
 }
 
 .tabPanel h3 {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   color: #1a1a2e;
   margin: 0 0 10px;
 }
@@ -208,7 +209,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13.5px;
+  font-size: 15px;
+  font-weight: 500;
   color: #3f3f46;
 }
 
@@ -219,13 +221,13 @@
 
 .showAllBtn {
   margin-top: 18px;
-  height: 42px;
+  height: 44px;
   padding: 0 18px;
   border-radius: 10px;
   border: 1.5px solid #93cceb;
   background: #fff;
   color: #0284c7;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -268,7 +270,7 @@
 }
 
 .modalTitle {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 800;
   margin: 0;
   color: #1a1a2e;
@@ -335,8 +337,8 @@
 }
 
 .mapLink {
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: 14.5px;
+  font-weight: 700;
   color: #0284c7;
   text-decoration: none;
 }
@@ -353,7 +355,7 @@
 }
 
 .ratingBigNumber {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 800;
   color: #1a1a2e;
 }
@@ -382,7 +384,7 @@
 
 .reviewAuthor {
   font-weight: 700;
-  font-size: 13.5px;
+  font-size: 15px;
   color: #1a1a2e;
 }
 
@@ -407,7 +409,7 @@
 }
 
 .reviewComment {
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: #3f3f46;
   line-height: 1.6;
   margin: 0;
@@ -457,7 +459,7 @@
   display: flex;
   align-items: baseline;
   gap: 6px;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 800;
   color: #1a1a2e;
 }
@@ -502,7 +504,8 @@
   flex-direction: column;
   padding: 8px 10px;
   gap: 2px;
-  font-size: 13.5px;
+  font-size: 15px;
+  font-weight: 500;
   color: #1a1a2e;
 }
 
@@ -511,7 +514,7 @@
 }
 
 .widgetDateLabel {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -554,21 +557,22 @@
 }
 
 .widgetGuestsValue {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   color: #1a1a2e;
-  min-width: 16px;
+  min-width: 20px;
   text-align: center;
 }
 
 .widgetStepperBtn {
-  width: 26px;
-  height: 26px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 1.5px solid #93cceb;
   background: #fff;
   color: #0284c7;
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 700;
   line-height: 1;
   cursor: pointer;
   display: flex;
@@ -587,12 +591,12 @@
 }
 
 .widgetBtn {
-  height: 48px;
+  height: 50px;
   border: none;
   border-radius: 999px;
   background: linear-gradient(135deg, #38bdf8, #0284c7);
   color: #fff;
-  font-size: 14.5px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   letter-spacing: 0.01em;
@@ -623,14 +627,14 @@
 .widgetRow {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
+  font-size: 14.5px;
   color: #57534e;
 }
 
 .widgetTotalRow {
   display: flex;
   justify-content: space-between;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 800;
   color: #1a1a2e;
   padding-top: 8px;

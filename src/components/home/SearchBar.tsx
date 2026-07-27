@@ -110,7 +110,13 @@ export function SearchBar({
   const isSearching = query !== "" && query !== "italia";
   const filteredSuggestions = useMemo(() => {
     if (!isSearching) return [];
-    return allLocationOptions.filter((v) => normalize(v).includes(query)).slice(0, 8);
+    // "Inizia con" sull'intera opzione o su una qualsiasi delle sue parole,
+    // così digitando "pu" esce sia "Puglia" sia "Otranto, Puglia" (comprese
+    // provincia/regione, che fanno parte della stessa etichetta).
+    return allLocationOptions.filter((v) => {
+      const words = normalize(v).split(/[^a-z0-9]+/).filter(Boolean);
+      return words.some((w) => w.startsWith(query));
+    });
   }, [allLocationOptions, isSearching, query]);
 
   useEffect(() => {
@@ -132,7 +138,19 @@ export function SearchBar({
     onChangeLocation(value);
     saveRecentSearch(value);
     setRecentSearches(loadRecentSearches());
-    setOpenPopup(null);
+    // Come su Booking/Airbnb: scelta la località si passa subito alle
+    // date, senza dover riaprire il campo a mano.
+    setOpenPopup("dates");
+  }
+
+  function handleDatesChange(nextCheckIn: string, nextCheckOut: string) {
+    onChangeDates(nextCheckIn, nextCheckOut);
+    // Intervallo completo (arrivo + partenza scelti): si passa agli
+    // ospiti, ultimo step prima che la ricerca (già live) mostri i
+    // risultati filtrati.
+    if (nextCheckIn && nextCheckOut) {
+      setOpenPopup("guests");
+    }
   }
 
   const guestsSummary =
@@ -284,7 +302,7 @@ export function SearchBar({
             <DateRangePicker
               checkIn={checkIn}
               checkOut={checkOut}
-              onChange={onChangeDates}
+              onChange={handleDatesChange}
               onClose={() => setOpenPopup(null)}
             />
           </div>

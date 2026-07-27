@@ -22,7 +22,7 @@
   display: flex;
   align-items: baseline;
   gap: 2px;
-  font-size: 20px;
+  font-size: 23px;
   font-weight: 800;
   flex-shrink: 0;
   color: #0284c7;
@@ -40,8 +40,8 @@
 }
 
 .rentLink {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: #1a1a2e;
   text-decoration: none;
   white-space: nowrap;
@@ -69,13 +69,13 @@
 }
 
 .resultsCount {
-  font-size: 14px;
+  font-size: 17px;
   color: #1a1a2e;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .statusNote {
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: #9ca3af;
   margin: 2px 24px 0;
   max-width: 1400px;
@@ -89,11 +89,13 @@
   padding: 48px 24px;
   text-align: center;
   color: #6b7280;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 500;
 }
 
 .moreLink {
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   color: #6b7280;
   text-decoration: none;
 }

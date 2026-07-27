@@ -15,8 +15,8 @@
   max-width: 1040px;
   width: 100%;
   margin: 0 auto 16px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: #0284c7;
   text-decoration: none;
 }
@@ -86,13 +86,13 @@
 }
 
 .title {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 800;
   margin: 0 0 4px;
 }
 
 .subtitle {
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: #6b7280;
   margin: 0 0 20px;
 }
@@ -107,7 +107,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: 15.5px;
+  font-weight: 500;
   color: #3f3f46;
   cursor: pointer;
 }
@@ -131,8 +132,8 @@
 }
 
 .label {
-  font-size: 12.5px;
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 700;
   color: #475569;
 }
 
@@ -147,11 +148,12 @@
 
 .input,
 .select {
-  height: 46px;
+  height: 48px;
   padding: 0 14px;
   border-radius: 10px;
   border: 1.5px solid #e2e8f0;
-  font-size: 14.5px;
+  font-size: 16px;
+  font-weight: 500;
   color: #0c4a6e;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -180,21 +182,22 @@
 }
 
 .stepperValue {
-  font-size: 14.5px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   color: #0c4a6e;
-  min-width: 18px;
+  min-width: 20px;
   text-align: center;
 }
 
 .stepperBtn {
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1.5px solid #93cceb;
   background: #fff;
   color: #0284c7;
-  font-size: 15px;
+  font-size: 19px;
+  font-weight: 700;
   line-height: 1;
   cursor: pointer;
   display: flex;
@@ -269,17 +272,17 @@
 
 .consentRow a {
   color: #0284c7;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .submitBtn {
   margin-top: 8px;
-  height: 52px;
+  height: 54px;
   border: none;
   border-radius: 999px;
   background: linear-gradient(135deg, #38bdf8, #0284c7);
   color: #fff;
-  font-size: 15px;
+  font-size: 16.5px;
   font-weight: 700;
   cursor: pointer;
   letter-spacing: 0.01em;
@@ -348,14 +351,14 @@
 }
 
 .trustTitle {
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 700;
   color: #1a1a2e;
   margin: 0 0 2px;
 }
 
 .trustText {
-  font-size: 12px;
+  font-size: 13px;
   color: #78716c;
   margin: 0;
 }
@@ -398,8 +401,8 @@
 }
 
 .recapTitle {
-  font-size: 14.5px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 800;
   color: #1a1a2e;
   margin: 0;
   line-height: 1.35;
@@ -424,9 +427,9 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 14.5px;
   color: #1a1a2e;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .recapRating svg {
@@ -434,7 +437,7 @@
 }
 
 .recapLocation {
-  font-size: 13px;
+  font-size: 14px;
   color: #57534e;
 }
 
@@ -447,7 +450,7 @@
 .recapRow {
   display: flex;
   justify-content: space-between;
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: #3f3f46;
 }
 
@@ -455,7 +458,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14.5px;
+  font-size: 16.5px;
   font-weight: 800;
   color: #1a1a2e;
   background: #e6f4fd;
@@ -505,14 +508,14 @@
 }
 
 .modalTitle {
-  font-size: 16px;
+  font-size: 19px;
   font-weight: 800;
   margin: 0 0 12px;
   color: #1a1a2e;
 }
 
 .modalText {
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.6;
   color: #3f3f46;
   margin: 0 0 18px;
