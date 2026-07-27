@@ -98,6 +98,7 @@
 
 .amenities {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   color: #9ca3af;
   margin-bottom: auto;
@@ -106,6 +107,7 @@
 
 .footer {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
   gap: 10px;
