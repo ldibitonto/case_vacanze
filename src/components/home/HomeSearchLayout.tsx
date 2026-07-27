@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./HomeSearchLayout.module.css";
 import { SearchBar } from "./SearchBar";
 import { PropertyCard } from "./PropertyCard";
@@ -107,12 +107,24 @@ export function HomeSearchLayout({
   }, [checkIn, checkOut, source]);
 
   const datesSelected = Boolean(checkIn && checkOut);
-  const dateFilteredProperties =
-    datesSelected && availableIds ? properties.filter((p) => availableIds.has(p.id)) : properties;
-  const displayedProperties = dateFilteredProperties.filter(
-    (p) => matchesLocation(p, location) && matchesFilters(p, filters)
+
+  // Senza memo, questi due array vengono ricreati (nuovo riferimento) a ogni
+  // render, anche quando il contenuto non cambia — es. mentre si clicca la
+  // data di arrivo nel calendario, prima ancora che la partenza sia scelta.
+  // MapView osserva "properties" per ricentrare la mappa (FitBounds) e con
+  // un riferimento sempre nuovo la rifà a ogni click, con l'animazione di
+  // Leaflet che blocca il resto del render: è per questo che il colore
+  // della data selezionata nel calendario impiegava secondi a comparire.
+  const dateFilteredProperties = useMemo(
+    () =>
+      datesSelected && availableIds ? properties.filter((p) => availableIds.has(p.id)) : properties,
+    [properties, datesSelected, availableIds]
   );
-  const activeFilterCount = countActiveFilters(filters);
+  const displayedProperties = useMemo(
+    () => dateFilteredProperties.filter((p) => matchesLocation(p, location) && matchesFilters(p, filters)),
+    [dateFilteredProperties, location, filters]
+  );
+  const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
 
   return (
     <div className={styles.page}>
@@ -123,6 +135,7 @@ export function HomeSearchLayout({
         </div>
 
         <SearchBar
+          properties={properties}
           location={location}
           onChangeLocation={setLocation}
           checkIn={checkIn}

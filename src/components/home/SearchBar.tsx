@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./SearchBar.module.css";
 import { CalendarIcon, FilterIcon, GuestsIcon, PetsIcon, PinIcon } from "./icons";
 import { DateRangePicker } from "./DateRangePicker";
+import type { Property } from "@/data/mockProperties";
 
+const NATION_OPTIONS = ["Italia"];
+
+// Corrispondono alle chiavi di REGION_PROVINCE_CODES (src/data/regions.ts):
+// sono le uniche regioni per cui il filtro della home sa riconoscere anche
+// indirizzi che non le nominano per esteso, quindi restano le uniche
+// suggerite come "regione" oltre alle città vere e proprie.
 const POPULAR_DESTINATIONS = [
   "Toscana",
   "Trentino-Alto Adige",
@@ -33,7 +40,18 @@ function saveRecentSearch(value: string) {
   window.localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(next));
 }
 
+// Confronto tollerante agli accenti (es. "citta" trova "Città") e al
+// maiuscolo/minuscolo.
+function normalize(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 type Props = {
+  properties?: Property[];
   location: string;
   onChangeLocation: (value: string) => void;
   checkIn: string;
@@ -50,6 +68,7 @@ type Props = {
 type PopupId = "location" | "dates" | "guests" | null;
 
 export function SearchBar({
+  properties = [],
   location,
   onChangeLocation,
   checkIn,
@@ -65,6 +84,34 @@ export function SearchBar({
   const [openPopup, setOpenPopup] = useState<PopupId>(null);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // Città (dagli indirizzi delle case vere) + regioni note + nazione: tutte
+  // le opzioni tra cui filtrare mentre l'utente digita.
+  const cityOptions = useMemo(() => {
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const p of properties) {
+      const label = p.location?.trim();
+      if (!label) continue;
+      const key = normalize(label);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(label);
+    }
+    return out;
+  }, [properties]);
+
+  const allLocationOptions = useMemo(
+    () => [...NATION_OPTIONS, ...POPULAR_DESTINATIONS, ...cityOptions],
+    [cityOptions]
+  );
+
+  const query = normalize(location);
+  const isSearching = query !== "" && query !== "italia";
+  const filteredSuggestions = useMemo(() => {
+    if (!isSearching) return [];
+    return allLocationOptions.filter((v) => normalize(v).includes(query)).slice(0, 8);
+  }, [allLocationOptions, isSearching, query]);
 
   useEffect(() => {
     setRecentSearches(loadRecentSearches());
@@ -132,11 +179,50 @@ export function SearchBar({
 
         {openPopup === "location" && (
           <div className={styles.popupCard}>
-            {recentSearches.length > 0 && (
+            {isSearching ? (
+              filteredSuggestions.length > 0 ? (
+                <>
+                  <p className={styles.popupSectionTitle}>Suggerimenti</p>
+                  <div className={styles.suggestionList}>
+                    {filteredSuggestions.map((v) => (
+                      <button
+                        key={v}
+                        type="button"
+                        className={styles.suggestionItem}
+                        onClick={() => commitLocation(v)}
+                      >
+                        <PinIcon size={15} />
+                        {v}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p className={styles.popupSectionTitle}>Nessun suggerimento per &quot;{location}&quot;</p>
+              )
+            ) : (
               <>
-                <p className={styles.popupSectionTitle}>Ricerche recenti</p>
+                {recentSearches.length > 0 && (
+                  <>
+                    <p className={styles.popupSectionTitle}>Ricerche recenti</p>
+                    <div className={styles.suggestionList}>
+                      {recentSearches.map((v) => (
+                        <button
+                          key={v}
+                          type="button"
+                          className={styles.suggestionItem}
+                          onClick={() => commitLocation(v)}
+                        >
+                          <PinIcon size={15} />
+                          {v}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+                <p className={styles.popupSectionTitle}>Destinazioni popolari</p>
                 <div className={styles.suggestionList}>
-                  {recentSearches.map((v) => (
+                  {POPULAR_DESTINATIONS.map((v) => (
                     <button
                       key={v}
                       type="button"
@@ -145,26 +231,12 @@ export function SearchBar({
                     >
                       <PinIcon size={15} />
                       {v}
+                      <span className={styles.suggestionSub}>Italia</span>
                     </button>
                   ))}
                 </div>
               </>
             )}
-            <p className={styles.popupSectionTitle}>Destinazioni popolari</p>
-            <div className={styles.suggestionList}>
-              {POPULAR_DESTINATIONS.map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  className={styles.suggestionItem}
-                  onClick={() => commitLocation(v)}
-                >
-                  <PinIcon size={15} />
-                  {v}
-                  <span className={styles.suggestionSub}>Italia</span>
-                </button>
-              ))}
-            </div>
           </div>
         )}
       </div>
