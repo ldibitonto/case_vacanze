@@ -113,7 +113,10 @@
 
 .content {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 460px;
+  /* 40% elenco / 60% mappa su desktop, come da riferimento: prima la mappa
+     era a larghezza fissa (460px), che su schermi larghi lasciava l'elenco
+     troppo largo rispetto alla mappa. */
+  grid-template-columns: minmax(0, 2fr) 3fr;
   gap: 20px;
   max-width: 1680px;
   margin: 0 auto;
