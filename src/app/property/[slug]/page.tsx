@@ -86,11 +86,17 @@ function PropertyDetailContent() {
 
   const [checkIn, setCheckIn] = useState(searchParams.get("checkIn") ?? "");
   const [checkOut, setCheckOut] = useState(searchParams.get("checkOut") ?? "");
+  // Le date con cui si è arrivati dalla home (query string), catturate una
+  // sola volta al montaggio: servono solo per capire se l'utente le ha poi
+  // toccate qui, non vanno mai riaggiornate durante la vita della pagina.
+  const [initialCheckIn] = useState(() => searchParams.get("checkIn") ?? "");
+  const [initialCheckOut] = useState(() => searchParams.get("checkOut") ?? "");
   const initialGuests = Number(searchParams.get("guests"));
   const [guests, setGuests] = useState(
     Number.isFinite(initialGuests) && initialGuests > 0 ? initialGuests : 1
   );
   const [widgetError, setWidgetError] = useState<string | null>(null);
+  const [unavailablePopup, setUnavailablePopup] = useState(false);
   const [checking, setChecking] = useState(false);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -202,8 +208,18 @@ function PropertyDetailContent() {
       : 0;
   const total = property ? nights * Number(property.basePrice) : 0;
 
+  // Vero solo se le date sono arrivate precompilate dalla home (ricerca già
+  // filtrata su quella disponibilità) E non sono state toccate qui: in quel
+  // caso il pulsante può dire direttamente "Prenota" invece di "Verifica
+  // disponibilità", perché dal punto di vista dell'utente l'ha già fatto.
+  const datesFromHomeUnmodified =
+    Boolean(initialCheckIn && initialCheckOut) &&
+    checkIn === initialCheckIn &&
+    checkOut === initialCheckOut;
+
   function handleCheckAvailability() {
     setWidgetError(null);
+    setUnavailablePopup(false);
 
     if (!property) return;
 
@@ -237,7 +253,10 @@ function PropertyDetailContent() {
         });
 
         if (blockedHit || bookingHit) {
-          setWidgetError("Le date selezionate non sono disponibili. Prova con altre date.");
+          // Errore di disponibilità: popup rosso in evidenza, non testo
+          // inline, per differenziarlo dai messaggi di validazione (date
+          // mancanti, ospiti oltre il massimo...) che restano sotto il form.
+          setUnavailablePopup(true);
           return;
         }
       }
@@ -570,7 +589,7 @@ function PropertyDetailContent() {
               onClick={handleCheckAvailability}
               disabled={checking}
             >
-              {checking ? "Verifico..." : "Verifica disponibilità"}
+              {checking ? "Verifico..." : datesFromHomeUnmodified ? "Prenota" : "Verifica disponibilità"}
             </button>
 
             {nights > 0 && (
@@ -595,6 +614,23 @@ function PropertyDetailContent() {
           </aside>
         </div>
       </div>
+
+      {unavailablePopup && (
+        <div className={styles.unavailableOverlay} onClick={() => setUnavailablePopup(false)}>
+          <div className={styles.unavailableModal} onClick={(e) => e.stopPropagation()}>
+            <p className={styles.unavailableText}>
+              Le date selezionate non sono disponibili. Prova con altre date.
+            </p>
+            <button
+              type="button"
+              className={styles.unavailableCloseBtn}
+              onClick={() => setUnavailablePopup(false)}
+            >
+              Ho capito
+            </button>
+          </div>
+        </div>
+      )}
 
       {showAllAmenities && (
         <div className={styles.modalOverlay} onClick={() => setShowAllAmenities(false)}>
