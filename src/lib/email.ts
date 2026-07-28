@@ -34,50 +34,66 @@ function buildHtml(params: BookingConfirmationEmailParams & { imageSrc: string }
     currency,
   } = params;
 
+  // Layout a tabelle ("bulletproof"), non div con margin:0 auto: è la
+  // tecnica standard per le email perché molti client (Outlook in testa,
+  // ma anche diversi client mobile) ignorano o interpretano male sia
+  // margin:auto che box-sizing su un div, con il risultato che il blocco
+  // centrale non risultava centrato ma spostato verso un lato. La cella
+  // <td align="center"> usa l'attributo HTML (non CSS) per il centraggio,
+  // supportato ovunque, e il padding vive tutto su celle di tabella invece
+  // che su div con una larghezza massima fissa.
   return `
-  <div style="font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #f0f9ff; padding: 24px; box-sizing: border-box;">
-    <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(2, 132, 199, 0.15);">
-      <img src="${imageSrc}" alt="${propertyName}" width="480" height="220" style="width: 100%; max-width: 100%; height: 220px; object-fit: cover; object-position: center; display: block;" />
-      <div style="padding: 28px 28px 32px; box-sizing: border-box;">
-        <p style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #0284c7; margin: 0 0 6px;">
-          Prenotazione confermata
-        </p>
-        <h1 style="font-size: 20px; margin: 0 0 18px; color: #0c4a6e;">${propertyName}</h1>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f0f9ff;">
+    <tr>
+      <td align="center" style="padding: 24px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 480px; font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+          <tr>
+            <td style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(2, 132, 199, 0.15);">
+              <img src="${imageSrc}" alt="${propertyName}" width="480" height="220" style="width: 100%; max-width: 100%; height: 220px; object-fit: cover; object-position: center; display: block;" />
+              <div style="padding: 28px 28px 32px;">
+                <p style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #0284c7; margin: 0 0 6px;">
+                  Prenotazione confermata
+                </p>
+                <h1 style="font-size: 20px; margin: 0 0 18px; color: #0c4a6e;">${propertyName}</h1>
 
-        <p style="font-size: 14px; color: #334155; margin: 0 0 4px;">Ciao ${guestName || "ospite"},</p>
-        <p style="font-size: 14px; color: #334155; line-height: 1.6; margin: 0 0 20px;">
-          il pagamento è andato a buon fine e la tua prenotazione è confermata. Ecco il riepilogo:
-        </p>
+                <p style="font-size: 14px; color: #334155; margin: 0 0 4px;">Ciao ${guestName || "ospite"},</p>
+                <p style="font-size: 14px; color: #334155; line-height: 1.6; margin: 0 0 20px;">
+                  il pagamento è andato a buon fine e la tua prenotazione è confermata. Ecco il riepilogo:
+                </p>
 
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
-          <tr>
-            <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #64748b;">Numero prenotazione</td>
-            <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #0c4a6e; text-align: right; font-weight: 600;">${bookingId}</td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #64748b;">Check-in</td>
-            <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #0c4a6e; text-align: right;">${checkIn}</td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #64748b;">Check-out</td>
-            <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #0c4a6e; text-align: right;">${checkOut}</td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #64748b; font-weight: 700;">Totale pagato</td>
-            <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 15px; color: #0c4a6e; text-align: right; font-weight: 800;">${totalPrice.toFixed(2)} ${currency}</td>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; margin-bottom: 24px;">
+                  <tr>
+                    <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #64748b;">Numero prenotazione</td>
+                    <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #0c4a6e; text-align: right; font-weight: 600;">${bookingId}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #64748b;">Check-in</td>
+                    <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #0c4a6e; text-align: right;">${checkIn}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #64748b;">Check-out</td>
+                    <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #0c4a6e; text-align: right;">${checkOut}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 13px; color: #64748b; font-weight: 700;">Totale pagato</td>
+                    <td style="padding: 10px 0; border-top: 1px solid #e2e8f0; font-size: 15px; color: #0c4a6e; text-align: right; font-weight: 800;">${totalPrice.toFixed(2)} ${currency}</td>
+                  </tr>
+                </table>
+
+                <p style="font-size: 14px; color: #334155; line-height: 1.6; margin: 0;">
+                  Grazie per aver scelto casa vacanze per il tuo prossimo soggiorno. Prepara le valigie:
+                  non vediamo l'ora di darti il benvenuto.
+                </p>
+                <p style="font-size: 14px; color: #0284c7; font-weight: 700; margin: 18px 0 0;">
+                  A presto, e buon viaggio!
+                </p>
+              </div>
+            </td>
           </tr>
         </table>
-
-        <p style="font-size: 14px; color: #334155; line-height: 1.6; margin: 0;">
-          Grazie per aver scelto casa vacanze per il tuo prossimo soggiorno. Prepara le valigie:
-          non vediamo l'ora di darti il benvenuto.
-        </p>
-        <p style="font-size: 14px; color: #0284c7; font-weight: 700; margin: 18px 0 0;">
-          A presto, e buon viaggio!
-        </p>
-      </div>
-    </div>
-  </div>`;
+      </td>
+    </tr>
+  </table>`;
 }
 
 export type ReviewRequestEmailParams = {
@@ -92,39 +108,53 @@ export type ReviewRequestEmailParams = {
 function buildReviewRequestHtml(params: ReviewRequestEmailParams) {
   const { guestName, propertyName, checkIn, checkOut, reviewUrl } = params;
 
+  // Vedi buildHtml() sopra per il perché del layout a tabelle invece che
+  // div con margin:0 auto (centraggio inaffidabile in molti client email).
   return `
-  <div style="font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #f0f9ff; padding: 24px; box-sizing: border-box;">
-    <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(2, 132, 199, 0.15);">
-      <div style="padding: 32px 28px; box-sizing: border-box;">
-        <p style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #0284c7; margin: 0 0 6px;">
-          Com'è andato il tuo soggiorno?
-        </p>
-        <h1 style="font-size: 20px; margin: 0 0 18px; color: #0c4a6e;">${propertyName}</h1>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f0f9ff;">
+    <tr>
+      <td align="center" style="padding: 24px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 480px; font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+          <tr>
+            <td style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(2, 132, 199, 0.15);">
+              <div style="padding: 32px 28px;">
+                <p style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #0284c7; margin: 0 0 6px;">
+                  Com'è andato il tuo soggiorno?
+                </p>
+                <h1 style="font-size: 20px; margin: 0 0 18px; color: #0c4a6e;">${propertyName}</h1>
 
-        <p style="font-size: 14px; color: #334155; margin: 0 0 4px;">Ciao ${guestName || "ospite"},</p>
-        <p style="font-size: 14px; color: #334155; line-height: 1.6; margin: 0 0 20px;">
-          speriamo tu ti sia trovato bene durante il soggiorno dal ${checkIn} al ${checkOut}.
-          Ci farebbe piacere leggere la tua opinione: bastano un paio di minuti e aiuta molto
-          i prossimi ospiti a scegliere.
-        </p>
+                <p style="font-size: 14px; color: #334155; margin: 0 0 4px;">Ciao ${guestName || "ospite"},</p>
+                <p style="font-size: 14px; color: #334155; line-height: 1.6; margin: 0 0 20px;">
+                  speriamo tu ti sia trovato bene durante il soggiorno dal ${checkIn} al ${checkOut}.
+                  Ci farebbe piacere leggere la tua opinione: bastano un paio di minuti e aiuta molto
+                  i prossimi ospiti a scegliere.
+                </p>
 
-        <div style="text-align: center; margin: 28px 0;">
-          <a href="${reviewUrl}" style="display: inline-block; background: linear-gradient(135deg, #38bdf8, #0284c7); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 14px; padding: 14px 28px; border-radius: 999px;">
-            Scrivi la tua recensione
-          </a>
-        </div>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0;">
+                  <tr>
+                    <td align="center">
+                      <a href="${reviewUrl}" style="display: inline-block; background: linear-gradient(135deg, #38bdf8, #0284c7); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 14px; padding: 14px 28px; border-radius: 999px;">
+                        Scrivi la tua recensione
+                      </a>
+                    </td>
+                  </tr>
+                </table>
 
-        <p style="font-size: 12.5px; color: #94a3b8; line-height: 1.6; margin: 0;">
-          Se il bottone non funziona, copia e incolla questo link nel browser:<br />
-          <a href="${reviewUrl}" style="color: #0284c7;">${reviewUrl}</a>
-        </p>
+                <p style="font-size: 12.5px; color: #94a3b8; line-height: 1.6; margin: 0;">
+                  Se il bottone non funziona, copia e incolla questo link nel browser:<br />
+                  <a href="${reviewUrl}" style="color: #0284c7;">${reviewUrl}</a>
+                </p>
 
-        <p style="font-size: 14px; color: #0284c7; font-weight: 700; margin: 24px 0 0;">
-          Grazie ancora per averci scelto!
-        </p>
-      </div>
-    </div>
-  </div>`;
+                <p style="font-size: 14px; color: #0284c7; font-weight: 700; margin: 24px 0 0;">
+                  Grazie ancora per averci scelto!
+                </p>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>`;
 }
 
 export async function sendReviewRequestEmail(params: ReviewRequestEmailParams) {
