@@ -14,9 +14,29 @@ type PropertyExtra = {
   promotedBy?: string;
 };
 
+// Foto reali da Unsplash (Unsplash License: uso libero anche commerciale),
+// le stesse identiche URL già usate e verificate in produzione per le 30
+// case demo in src/data/demoSeedProperties.ts — riusate qui apposta invece
+// di introdurne di nuove, per non correre il rischio di link non validi.
+// Sostituiscono i precedenti placeholder Lorem Picsum (picsum.photos), che
+// restituivano foto casuali non a tema.
 export const propertyExtras: Record<string, PropertyExtra> = {
+  "casa-girasole": {
+    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900&q=80",
+    sqm: 75,
+    amenities: ["wifi", "parking", "garden"],
+    rating: 4.6,
+    reviews: 12,
+  },
+  "baita-stella-alpina": {
+    image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=900&q=80",
+    sqm: 65,
+    amenities: ["wifi", "parking", "heating"],
+    rating: 4.7,
+    reviews: 9,
+  },
   "casa-piscina-sicilia": {
-    image: "https://picsum.photos/seed/sicilia-pool/640/420",
+    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=80",
     sqm: 60,
     amenities: ["pool", "parking", "wifi", "ac", "garden"],
     rating: 4.9,
@@ -24,7 +44,7 @@ export const propertyExtras: Record<string, PropertyExtra> = {
     promotedBy: "Booking.com",
   },
   "casa-terrazza-otranto": {
-    image: "https://picsum.photos/seed/puglia-terrazza/640/420",
+    image: "https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?w=900&q=80",
     sqm: 65,
     amenities: ["sea-view", "wifi", "ac", "kitchen"],
     rating: 4.5,
@@ -32,28 +52,28 @@ export const propertyExtras: Record<string, PropertyExtra> = {
     promotedBy: "Booking.com",
   },
   "villa-maddalena-sardegna": {
-    image: "https://picsum.photos/seed/sardegna-villa/640/420",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80",
     sqm: 110,
     amenities: ["pool", "garden", "parking", "wifi"],
     rating: 4.8,
     reviews: 21,
   },
   "casale-toscana": {
-    image: "https://picsum.photos/seed/toscana-casale/640/420",
+    image: "https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=900&q=80",
     sqm: 140,
     amenities: ["pool", "wifi", "parking", "pets", "kitchen"],
     rating: 4.7,
     reviews: 63,
   },
   "appartamento-como": {
-    image: "https://picsum.photos/seed/como-lago/640/420",
+    image: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=900&q=80",
     sqm: 55,
     amenities: ["wifi", "ac", "sea-view"],
     rating: 4.6,
     reviews: 32,
   },
   "trullo-valle-itria": {
-    image: "https://picsum.photos/seed/puglia-trullo/640/420",
+    image: "https://images.unsplash.com/photo-1600047509782-20d39509f26d?w=900&q=80",
     sqm: 50,
     amenities: ["garden", "wifi", "parking", "kitchen"],
     rating: 4.9,
@@ -61,19 +81,19 @@ export const propertyExtras: Record<string, PropertyExtra> = {
   },
 };
 
-// Fallback per property nel DB che non hanno un extra dedicato (es. quelle
-// già seedate in origine: "casa-girasole", "baita-stella-alpina"), così la
-// homepage resta presentabile per qualunque Property venga aggiunta.
+// Fallback per property nel DB che non hanno un extra dedicato, così la
+// homepage resta presentabile per qualunque Property venga aggiunta senza
+// una foto propria caricata da /admin/properties.
 const fallbackPalette: PropertyExtra[] = [
   {
-    image: "https://picsum.photos/seed/casa-fallback-1/640/420",
+    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&q=80",
     sqm: 75,
     amenities: ["wifi", "parking", "garden"],
     rating: 4.6,
     reviews: 12,
   },
   {
-    image: "https://picsum.photos/seed/casa-fallback-2/640/420",
+    image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=900&q=80",
     sqm: 90,
     amenities: ["wifi", "kitchen", "ac"],
     rating: 4.7,
