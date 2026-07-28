@@ -53,7 +53,9 @@
 }
 
 .rentLink:hover {
-  color: #7c3aed;
+  /* Stesso azzurro dei pulsanti principali (Vai all'offerta, Filtro...),
+     non più il viola. */
+  color: #0284c7;
 }
 
 .menuBtn {

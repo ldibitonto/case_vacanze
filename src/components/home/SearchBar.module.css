@@ -152,18 +152,22 @@
   padding: 0 20px;
   border: none;
   border-radius: 999px;
-  background: #f3e8ff;
-  color: #7c3aed;
+  /* Stesso azzurro dei pulsanti "Vai all'offerta"/"Prenota"/"Verifica
+     disponibilità" in tutto il sito, non più il viola. */
+  background: linear-gradient(160deg, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  color: #fff;
   font-size: 15px;
   font-weight: 800;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s ease, transform 0.15s ease;
+  transition: filter 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .filterBtn:hover {
-  background: #e9d5ff;
+  filter: brightness(1.05);
   transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .filterBadge {
@@ -174,8 +178,8 @@
   height: 18px;
   padding: 0 5px;
   border-radius: 999px;
-  background: #7c3aed;
-  color: #fff;
+  background: #fff;
+  color: #0284c7;
   font-size: 11px;
   font-weight: 700;
 }
