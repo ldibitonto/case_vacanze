@@ -4,6 +4,7 @@ import { FormEvent, Suspense, useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import { StarIcon } from "@/components/home/icons";
+import { AddressAutocomplete } from "@/components/home/AddressAutocomplete";
 
 // Step "Inizia la prenotazione": stepper (Dati personali / Metodo di
 // pagamento / Fatto) + form dati personali + un breve recap della
@@ -295,11 +296,11 @@ function BookingPageContent() {
                   <label className={styles.label} htmlFor="street">
                     Indirizzo <span className={styles.required}>*</span>
                   </label>
-                  <input
+                  <AddressAutocomplete
                     id="street"
                     className={styles.input}
                     value={street}
-                    onChange={(e) => setStreet(e.target.value)}
+                    onChange={setStreet}
                     required
                   />
                 </div>
@@ -322,11 +323,11 @@ function BookingPageContent() {
                   <label className={styles.label} htmlFor="city">
                     Città <span className={styles.required}>*</span>
                   </label>
-                  <input
+                  <AddressAutocomplete
                     id="city"
                     className={styles.input}
                     value={city}
-                    onChange={(e) => setCity(e.target.value)}
+                    onChange={setCity}
                     required
                   />
                 </div>

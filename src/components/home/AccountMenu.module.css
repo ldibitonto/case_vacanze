@@ -1,0 +1,199 @@
+.wrapper {
+  position: relative;
+}
+
+.menuBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #1f2937;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.menuBtn:hover {
+  border-color: #0284c7;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.18);
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: linear-gradient(160deg, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 300px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
+  padding: 18px;
+  z-index: 60;
+}
+
+/* --- Stato loggato --- */
+
+.welcomeBlock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.avatarBig {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: linear-gradient(160deg, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.welcomeTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.welcomeEmail {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 210px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+  border-radius: 10px;
+  color: #1f2937;
+  font-size: 14.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.12s ease;
+}
+
+.menuItem:hover {
+  background: #f0f9ff;
+  color: #0284c7;
+}
+
+.logoutBtn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 8px;
+  border: none;
+  border-top: 1px solid #f1f5f9;
+  border-radius: 0;
+  background: none;
+  color: #dc2626;
+  font-size: 14.5px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.logoutBtn:hover {
+  color: #b91c1c;
+}
+
+/* --- Stato non loggato (accedi come guest) --- */
+
+.loginTitle {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.loginSubtitle {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.loginInput {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+}
+
+.loginInput:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.loginBtn {
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(160deg, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.loginBtn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.errorText {
+  margin: 0;
+  font-size: 12.5px;
+  color: #dc2626;
+}
+
+.sentText {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1f2937;
+  line-height: 1.5;
+}
+
+.devLink {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: #0284c7;
+}

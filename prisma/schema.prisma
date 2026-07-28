@@ -93,6 +93,24 @@ enum BookingStatus {
   CANCELLED  // annullata (timeout pagamento, cancellazione manuale, ecc.)
 }
 
+// Profilo di un ospite che accede senza password ("Accedi come guest", vedi
+// src/lib/guestAuth.ts): non c'è una vera tabella utenti/password, solo
+// questi dati anagrafici associati alla mail, così il checkout può
+// precompilarli e "Le tue prenotazioni" può ritrovare le Booking fatte con
+// la stessa mail (Booking.guestEmail). Creato/aggiornato al primo salvataggio
+// da /account, non al login: appena entrati con il link via mail il profilo
+// può ancora non esistere.
+model GuestProfile {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String   @default("")
+  surname   String   @default("")
+  phone     String   @default("")
+  address   String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // Date bloccate manualmente o importate via iCal da Airbnb/Booking.com,
 // per evitare overbooking tra i diversi canali di vendita.
 model BlockedDate {

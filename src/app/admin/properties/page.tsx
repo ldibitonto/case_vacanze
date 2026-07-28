@@ -5,6 +5,7 @@ import styles from "./page.module.css";
 import type { Amenity } from "@/data/mockProperties";
 import { amenityGroups } from "@/data/amenities";
 import { amenityIcon } from "@/components/home/icons";
+import { AddressAutocomplete } from "@/components/home/AddressAutocomplete";
 
 // Pannello per creare/modificare le case vacanza e caricarne le foto, senza
 // dover toccare codice o Prisma Studio. Nessuna autenticazione: come /admin,
@@ -360,11 +361,11 @@ export default function AdminPropertiesPage() {
 
             <div className={styles.fieldGroup}>
               <label htmlFor="address">Indirizzo</label>
-              <input
+              <AddressAutocomplete
                 id="address"
                 className={styles.input}
                 value={form.address}
-                onChange={(e) => setForm((f) => ({ ...f, address: e.target.value }))}
+                onChange={(v) => setForm((f) => ({ ...f, address: v }))}
                 placeholder="Via, città, provincia — usato anche per la posizione in mappa"
               />
             </div>

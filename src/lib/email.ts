@@ -246,3 +246,88 @@ export async function sendBookingConfirmationEmail(params: BookingConfirmationEm
     return { sent: false as const, reason: "send_error" as const };
   }
 }
+
+export type GuestLoginEmailParams = {
+  to: string;
+  loginUrl: string;
+};
+
+function buildGuestLoginHtml(params: GuestLoginEmailParams) {
+  const { loginUrl } = params;
+
+  // Vedi buildHtml() sopra per il perché del layout a tabelle invece che
+  // div con margin:0 auto (centraggio inaffidabile in molti client email).
+  return `
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f0f9ff;">
+    <tr>
+      <td align="center" style="padding: 24px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 480px; font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+          <tr>
+            <td style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(2, 132, 199, 0.15);">
+              <div style="padding: 32px 28px;">
+                <p style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #0284c7; margin: 0 0 6px;">
+                  Il tuo link di accesso
+                </p>
+                <h1 style="font-size: 20px; margin: 0 0 18px; color: #0c4a6e;">Accedi a Case Vacanze</h1>
+
+                <p style="font-size: 14px; color: #334155; line-height: 1.6; margin: 0 0 20px;">
+                  Clicca il pulsante qui sotto per accedere: il link è valido per 30 minuti e può
+                  essere usato una sola volta.
+                </p>
+
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0;">
+                  <tr>
+                    <td align="center">
+                      <a href="${loginUrl}" style="display: inline-block; background: linear-gradient(135deg, #38bdf8, #0284c7); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 14px; padding: 14px 28px; border-radius: 999px;">
+                        Accedi
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="font-size: 12.5px; color: #94a3b8; line-height: 1.6; margin: 0;">
+                  Se il bottone non funziona, copia e incolla questo link nel browser:<br />
+                  <a href="${loginUrl}" style="color: #0284c7;">${loginUrl}</a>
+                </p>
+
+                <p style="font-size: 12.5px; color: #94a3b8; line-height: 1.6; margin: 18px 0 0;">
+                  Se non hai richiesto tu questo accesso, ignora pure questa email.
+                </p>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>`;
+}
+
+export async function sendGuestLoginEmail(params: GuestLoginEmailParams) {
+  if (!resend) {
+    console.warn(
+      `[email] RESEND_API_KEY non configurata: link di accesso per "${params.to}" non inviato (solo log). Link: ${params.loginUrl}`
+    );
+    return { sent: false as const, reason: "missing_api_key" as const };
+  }
+
+  const from = process.env.EMAIL_FROM || "Case Vacanze <onboarding@resend.dev>";
+
+  try {
+    const result = await resend.emails.send({
+      from,
+      to: params.to,
+      subject: "Il tuo link di accesso a Case Vacanze",
+      html: buildGuestLoginHtml(params),
+    });
+
+    if (result.error) {
+      console.error("[email] Resend ha rifiutato l'invio del link di accesso:", result.error);
+      return { sent: false as const, reason: "send_error" as const };
+    }
+
+    return { sent: true as const, id: result.data?.id };
+  } catch (err) {
+    console.error("[email] Errore invio email di accesso:", err);
+    return { sent: false as const, reason: "send_error" as const };
+  }
+}

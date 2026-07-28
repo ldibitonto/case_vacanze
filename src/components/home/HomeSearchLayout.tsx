@@ -9,7 +9,7 @@ import { MapPreview } from "./MapPreview";
 import { MapErrorBoundary } from "./MapErrorBoundary";
 import { FilterPanel, EMPTY_FILTERS, countActiveFilters, matchesFilters } from "./FilterPanel";
 import type { FiltersState } from "./FilterPanel";
-import { MenuIcon } from "./icons";
+import { AccountMenu } from "./AccountMenu";
 import type { Amenity, Property } from "@/data/mockProperties";
 import { REGION_PROVINCE_CODES } from "@/data/regions";
 
@@ -173,9 +173,7 @@ export function HomeSearchLayout({
           <a href="#" className={styles.rentLink}>
             Affitta con noi
           </a>
-          <button type="button" className={styles.menuBtn} aria-label="Menu">
-            <MenuIcon size={22} />
-          </button>
+          <AccountMenu />
         </div>
       </header>
 

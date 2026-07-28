@@ -187,6 +187,36 @@ export function GuestsIcon({ size, className }: IconProps) {
   );
 }
 
+export function UserCircleIcon({ size, className }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="10" r="3" />
+      <path d="M6.5 19a6 6 0 0 1 11 0" />
+    </svg>
+  );
+}
+
+export function BriefcaseIcon({ size, className }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <rect x="3" y="7" width="18" height="13" rx="2" />
+      <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <path d="M3 12h18" />
+    </svg>
+  );
+}
+
+export function LogoutIcon({ size, className }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <path d="M16 17l5-5-5-5" />
+      <path d="M21 12H9" />
+    </svg>
+  );
+}
+
 export function MenuIcon({ size, className }: IconProps) {
   return (
     <svg {...base(size)} className={className}>
