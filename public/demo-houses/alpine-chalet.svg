@@ -1,0 +1,28 @@
+<svg viewBox="0 0 800 533" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a8d8f0"/>
+      <stop offset="100%" stop-color="#e8f4fb"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="533" fill="url(#sky)"/>
+  <polygon points="0,340 160,140 320,340" fill="#c9dbe8"/>
+  <polygon points="120,340 260,180 400,340" fill="#dce9f2"/>
+  <polygon points="500,340 640,160 800,340" fill="#c9dbe8"/>
+  <polygon points="160,140 190,190 130,190" fill="#ffffff"/>
+  <polygon points="640,160 665,205 615,205" fill="#ffffff"/>
+  <rect y="330" width="800" height="203" fill="#dff0e0"/>
+  <ellipse cx="140" cy="470" rx="60" ry="20" fill="#c7e3c9"/>
+  <ellipse cx="640" cy="480" rx="70" ry="22" fill="#c7e3c9"/>
+  <polygon points="60,360 100,300 140,360" fill="#3f6b4a"/>
+  <rect x="90" y="350" width="20" height="20" fill="#3f6b4a"/>
+  <polygon points="660,370 705,300 750,370" fill="#355c3f"/>
+  <rect x="290" y="290" width="220" height="150" fill="#8a5a3b"/>
+  <polygon points="270,300 400,210 530,300" fill="#5b3a26"/>
+  <rect x="330" y="350" width="50" height="90" fill="#4a2f1e"/>
+  <rect x="420" y="330" width="40" height="40" fill="#f4e3c1" stroke="#5b3a26" stroke-width="4"/>
+  <rect x="330" y="330" width="0" height="0"/>
+  <rect x="270" y="330" width="40" height="40" fill="#f4e3c1" stroke="#5b3a26" stroke-width="4"/>
+  <rect x="285" y="410" width="230" height="10" fill="#6b4327"/>
+  <circle cx="700" cy="90" r="36" fill="#ffd873"/>
+</svg>

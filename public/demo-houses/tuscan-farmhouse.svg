@@ -1,0 +1,21 @@
+<svg viewBox="0 0 800 533" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbd9a5"/>
+      <stop offset="100%" stop-color="#fef3e0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="533" fill="url(#sky4)"/>
+  <circle cx="150" cy="110" r="50" fill="#ffcf6b"/>
+  <path d="M0 330 Q200 260 400 320 T800 300 V533 H0 Z" fill="#cbdf9e"/>
+  <path d="M0 400 Q250 350 500 400 T800 380 V533 H0 Z" fill="#b6d187"/>
+  <rect x="300" y="290" width="260" height="140" fill="#e3caa0"/>
+  <polygon points="280,290 430,220 580,290" fill="#8a4a35"/>
+  <rect x="410" y="360" width="50" height="70" fill="#5b3a26"/>
+  <rect x="330" y="330" width="36" height="36" fill="#8fd0e8" stroke="#fff" stroke-width="4"/>
+  <rect x="500" y="330" width="36" height="36" fill="#8fd0e8" stroke="#fff" stroke-width="4"/>
+  <polygon points="600,340 618,290 636,340" fill="#3f5c3f"/>
+  <rect x="612" y="325" width="12" height="20" fill="#3f5c3f"/>
+  <polygon points="640,345 655,305 670,345" fill="#496b49"/>
+  <polygon points="660,335 678,285 696,335" fill="#3f5c3f"/>
+</svg>
