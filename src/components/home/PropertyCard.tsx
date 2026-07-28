@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import styles from "./PropertyCard.module.css";
 import {
@@ -12,6 +12,13 @@ import {
   StarIcon,
 } from "./icons";
 import type { Property } from "@/data/mockProperties";
+
+// Rete di sicurezza per foto esterne (es. Unsplash) che possono non
+// caricare per un link non più valido, un timeout o un servizio giù:
+// invece di lasciar comparire l'icona di immagine rotta, la card passa a
+// un'illustrazione locale spedita con l'app, che quindi non può mai
+// mancare. Vedi PropertyCard.module.css / public/demo-houses.
+const FALLBACK_IMAGE = "/demo-houses/mediterranean-villa.svg";
 
 export function PropertyCard({
   property,
@@ -36,6 +43,12 @@ export function PropertyCard({
   }, [property.image, property.images]);
   const [slide, setSlide] = useState(0);
   const hasMultiple = gallery.length > 1;
+
+  const [imgFailed, setImgFailed] = useState(false);
+  useEffect(() => {
+    setImgFailed(false);
+  }, [slide, gallery]);
+  const displaySrc = imgFailed ? FALLBACK_IMAGE : gallery[slide];
 
   function goPrev(e: React.MouseEvent) {
     e.preventDefault();
@@ -68,7 +81,12 @@ export function PropertyCard({
     <article className={styles.card}>
       <div className={styles.imageWrap}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={gallery[slide]} alt={property.title} className={styles.image} />
+        <img
+          src={displaySrc}
+          alt={property.title}
+          className={styles.image}
+          onError={() => setImgFailed(true)}
+        />
 
         {hasMultiple && (
           <>

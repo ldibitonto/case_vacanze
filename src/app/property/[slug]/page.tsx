@@ -62,6 +62,15 @@ type TabId = (typeof TABS)[number]["id"];
 
 const AMENITIES_PREVIEW_COUNT = 8;
 
+// Rete di sicurezza se una foto esterna non carica (link non più valido,
+// servizio giù): mostriamo un'illustrazione locale al posto dell'icona di
+// immagine rotta. Vedi anche PropertyCard.tsx (stessa logica in home).
+const IMG_FALLBACK = "/demo-houses/mediterranean-villa.svg";
+function handleImgError(e: React.SyntheticEvent<HTMLImageElement>) {
+  if (e.currentTarget.src.endsWith(IMG_FALLBACK)) return;
+  e.currentTarget.src = IMG_FALLBACK;
+}
+
 export default function PropertyDetailPage() {
   return (
     <Suspense fallback={null}>
@@ -307,10 +316,11 @@ function PropertyDetailContent() {
           {galleryImages.length <= 1 ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={galleryImages[0] ?? "https://picsum.photos/seed/casa-fallback/900/600"}
+              src={galleryImages[0] ?? IMG_FALLBACK}
               alt={property.name}
               className={styles.galleryOnly}
               onClick={() => setLightboxIndex(0)}
+              onError={handleImgError}
             />
           ) : (
             <>
@@ -320,6 +330,7 @@ function PropertyDetailContent() {
                 alt={property.name}
                 className={styles.galleryMain}
                 onClick={() => setLightboxIndex(0)}
+                onError={handleImgError}
               />
               {galleryImages.slice(1, 5).map((url, i) => (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -329,6 +340,7 @@ function PropertyDetailContent() {
                   alt={property.name}
                   className={styles.galleryThumb}
                   onClick={() => setLightboxIndex(i + 1)}
+                  onError={handleImgError}
                 />
               ))}
             </>

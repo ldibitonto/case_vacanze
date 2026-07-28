@@ -2,14 +2,16 @@ import type { Amenity } from "./mockProperties";
 
 // Case vacanza "demo" distribuite su tutte le 20 regioni italiane, usate
 // solo per popolare il sito di prova con un catalogo realistico (vedi
-// GET /api/admin/seed-demo). Le foto sono illustrazioni SVG disegnate a
-// mano, spedite con l'app in public/demo-houses/ — non foto da servizi
-// esterni. Prima si erano provati sia picsum.photos (immagine causale da
+// GET /api/admin/seed-demo). Foto vere da Unsplash (fotografiche, non
+// illustrate): prima si erano provati picsum.photos (immagine causale da
 // tutto il suo catalogo: poteva capitare un tavolino, una mano, qualunque
-// cosa) sia LoremFlickr (foto filtrate per parola chiave, ma il servizio si
-// è rivelato inaffidabile in produzione, immagini che non caricavano).
-// Un'illustrazione locale garantisce invece che sia sempre una casa, sempre
-// visibile, senza dipendere da nessun servizio esterno.
+// cosa) e LoremFlickr (filtrato per parola chiave ma inaffidabile in
+// produzione, immagini che non caricavano). Non potendo verificare da qui
+// che ogni singolo link Unsplash sia ancora valido, PropertyCard e la
+// pagina dettaglio hanno comunque una rete di sicurezza: se una foto non
+// carica, mostrano al suo posto un'illustrazione locale (mai più un'icona
+// di immagine rotta). "illustration" resta come categoria per scegliere le
+// foto giuste e come nome del file di fallback.
 type DemoProperty = {
   name: string;
   slug: string;
@@ -26,8 +28,46 @@ type DemoProperty = {
   amenities: Amenity[];
 };
 
+// Foto reali Unsplash per categoria (2 per categoria, per un minimo di
+// varietà nello slider senza moltiplicare il rischio di link non più
+// validi su troppi ID diversi).
+const CATEGORY_PHOTOS: Record<string, string[]> = {
+  "alpine-chalet": [
+    "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=900&q=80",
+    "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=900&q=80",
+  ],
+  "mediterranean-villa": [
+    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=80",
+    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80",
+  ],
+  trullo: [
+    "https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=900&q=80",
+    "https://images.unsplash.com/photo-1600047509782-20d39509f26d?w=900&q=80",
+  ],
+  "tuscan-farmhouse": [
+    "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900&q=80",
+    "https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=900&q=80",
+  ],
+  "seaside-cottage": [
+    "https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?w=900&q=80",
+    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=900&q=80",
+  ],
+  "city-loft": [
+    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&q=80",
+    "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=900&q=80",
+  ],
+  "lake-house": [
+    "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=900&q=80",
+    "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=900&q=80",
+  ],
+  "cave-house": [
+    "https://images.unsplash.com/photo-1600047509782-20d39509f26d?w=900&q=80",
+    "https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=900&q=80",
+  ],
+};
+
 function images(illustration: string): string[] {
-  return [`/demo-houses/${illustration}.svg`];
+  return CATEGORY_PHOTOS[illustration] ?? [`/demo-houses/${illustration}.svg`];
 }
 
 export const demoSeedPropertiesRaw: DemoProperty[] = [
