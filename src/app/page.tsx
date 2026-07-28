@@ -3,8 +3,20 @@ import { prisma } from "@/lib/db";
 import { HomeSearchLayout } from "@/components/home/HomeSearchLayout";
 import { mockProperties } from "@/data/mockProperties";
 import { buildDisplayProperty, FALLBACK_COORDS } from "@/data/propertyExtras";
-import { geocodeSequentially } from "@/lib/geocode";
+import { geocodeAddress } from "@/lib/geocode";
 import { getReviewAggregates, withReviewAggregate } from "@/lib/reviews";
+
+// Nominatim va rispettato con ~1 richiesta/secondo (vedi lib/geocode.ts):
+// geocodificare tutte le case mancanti in un colpo solo, in un catalogo che
+// ormai ne conta decine, richiederebbe più tempo del timeout della funzione
+// serverless — e se la funzione viene interrotta a metà, quelle già
+// geocodificate ma non ancora salvate andrebbero ripetute al giro
+// successivo, restando bloccate per sempre. Per questo: (a) ne processiamo
+// al massimo MAX_GEOCODE_PER_LOAD per caricamento, (b) salviamo ogni
+// risultato subito dopo averlo calcolato invece di aspettare la fine del
+// lotto. Con un catalogo grande bastano un paio di ricaricamenti della home
+// perché tutte le case restanti ottengano una posizione reale sulla mappa.
+const MAX_GEOCODE_PER_LOAD = 8;
 
 // Pagina sempre dinamica: legge dal DB in tempo reale (disponibilità, case
 // aggiunte in admin, recensioni appena arrivate...). Senza questa riga
@@ -26,36 +38,36 @@ export default async function HomePage() {
   // dal suo indirizzo (Nominatim/OpenStreetMap) e li salviamo in DB, così la
   // geocodifica avviene una sola volta per casa e la mappa mostra la
   // posizione reale invece di coordinate finte.
-  const missingCoords = dbProperties.filter(
-    (p) => (p.lat == null || p.lng == null) && p.address
-  );
+  const missingCoords = dbProperties
+    .filter((p) => (p.lat == null || p.lng == null) && p.address)
+    .slice(0, MAX_GEOCODE_PER_LOAD);
 
-  if (missingCoords.length > 0) {
-    const geocoded = await geocodeSequentially(missingCoords, (p) => p.address as string);
+  for (const property of missingCoords) {
+    const coords = await geocodeAddress(property.address as string);
 
-    await Promise.all(
-      Array.from(geocoded.entries()).map(async ([property, coords]) => {
-        if (!coords) {
-          // Anche se la geocodifica fallisce salviamo un fallback (Roma):
-          // altrimenti lat/lng resta null e la home ritenta la geocodifica
-          // (con le sue chiamate sequenziali a Nominatim) ad OGNI caricamento,
-          // rendendo la pagina lenta per sempre invece che una volta sola.
-          // Loggato per diagnosticarlo; per riprovare un indirizzo dopo averlo
-          // corretto, azzera lat/lng di quella Property da /admin o Prisma Studio.
-          console.warn(
-            `[geocode] Nessun risultato per "${property.address}" (property ${property.slug}). Uso una posizione di fallback, niente più retry automatici.`
-          );
-        }
+    if (!coords) {
+      // Anche se la geocodifica fallisce salviamo un fallback (Roma):
+      // altrimenti lat/lng resta null e la home ritenta la geocodifica
+      // (con le sue chiamate a Nominatim) ad OGNI caricamento, rendendo la
+      // pagina lenta per sempre invece che una volta sola. Loggato per
+      // diagnosticarlo; per riprovare un indirizzo dopo averlo corretto,
+      // azzera lat/lng di quella Property da /admin o Prisma Studio.
+      console.warn(
+        `[geocode] Nessun risultato per "${property.address}" (property ${property.slug}). Uso una posizione di fallback, niente più retry automatici.`
+      );
+    }
 
-        const { lat, lng } = coords ?? FALLBACK_COORDS;
-        const updated = await prisma.property.update({
-          where: { id: property.id },
-          data: { lat, lng },
-        });
-        property.lat = updated.lat;
-        property.lng = updated.lng;
-      })
-    );
+    // Salvato subito, non alla fine del lotto: se la funzione viene
+    // interrotta a metà (troppe case da geocodificare per il timeout della
+    // funzione serverless), quanto già fatto resta comunque acquisito e il
+    // prossimo caricamento riparte dalle sole case ancora mancanti.
+    const { lat, lng } = coords ?? FALLBACK_COORDS;
+    const updated = await prisma.property.update({
+      where: { id: property.id },
+      data: { lat, lng },
+    });
+    property.lat = updated.lat;
+    property.lng = updated.lng;
   }
 
   // Se il DB è vuoto (es. prima del seed) mostriamo comunque il layout con
