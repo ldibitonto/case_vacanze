@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
   background: linear-gradient(160deg, #ffffff 0%, #fafafa 45%, #ffffff 100%);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+  font-family: var(--font-heading), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
     sans-serif;
   color: #1a1a2e;
   padding-bottom: 64px;
@@ -591,19 +591,23 @@
 }
 
 .widgetBtn {
-  height: 50px;
+  height: 54px;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(135deg, #38bdf8, #0284c7);
+  background: linear-gradient(160deg, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   color: #fff;
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 16.5px;
+  font-weight: 800;
   cursor: pointer;
   letter-spacing: 0.01em;
+  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
 }
 
 .widgetBtn:hover {
-  filter: brightness(1.04);
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(2, 132, 199, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .widgetBtn:disabled {

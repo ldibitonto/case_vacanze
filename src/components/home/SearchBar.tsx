@@ -365,13 +365,18 @@ export function SearchBar({
 
       <div className={styles.fieldWrap}>
         {datesSummary === "" && openPopup !== "dates" ? (
-          <div
-            className={`${styles.field} ${styles.dates}`}
-            onClick={() => setOpenPopup("dates")}
-          >
-            <CalendarIcon size={16} />
-            <span className={styles.datesPlaceholder}>Scegli le date</span>
-          </div>
+          <>
+            <div
+              className={`${styles.field} ${styles.dates} ${styles.fieldHint}`}
+              onClick={() => setOpenPopup("dates")}
+            >
+              <CalendarIcon size={16} />
+              <span className={styles.datesPlaceholder}>Scegli le date</span>
+            </div>
+            <div className={styles.hintBubble}>
+              Seleziona le date per prezzi e disponibilità esatti
+            </div>
+          </>
         ) : (
           <div className={styles.dateFieldsRow}>
             <div

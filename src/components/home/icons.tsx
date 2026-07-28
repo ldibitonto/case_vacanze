@@ -11,6 +11,30 @@ const base = (size = 16) => ({
   strokeLinejoin: "round" as const,
 });
 
+export function ChevronLeftIcon({ size, className }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <path d="M15 18l-6-6 6-6" />
+    </svg>
+  );
+}
+
+export function ChevronRightIcon({ size, className }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <path d="M9 18l6-6-6-6" />
+    </svg>
+  );
+}
+
+export function ExpandIcon({ size, className }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3" />
+    </svg>
+  );
+}
+
 export function WifiIcon({ size, className }: IconProps) {
   return (
     <svg {...base(size)} className={className}>

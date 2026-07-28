@@ -33,6 +33,10 @@ export type Property = {
   location: string;
   region: string;
   image: string;
+  // Foto aggiuntive per lo slider della card (oltre alla "image" principale).
+  // Opzionale: se assente/vuoto la card mostra comunque solo "image", senza
+  // frecce/puntini superflui per una sola foto.
+  images?: string[];
   sqm: number;
   guests: number;
   bedrooms: number;
@@ -58,6 +62,12 @@ export const mockProperties: Property[] = [
     location: "Sicilia",
     region: "Sud Italia",
     image: "https://picsum.photos/seed/sicilia-pool/640/420",
+
+    images: [
+      "https://picsum.photos/seed/sicilia-pool/640/420",
+      "https://picsum.photos/seed/sicilia-pool-2/640/420",
+      "https://picsum.photos/seed/sicilia-pool-3/640/420",
+    ],
     sqm: 60,
     guests: 7,
     bedrooms: 2,
@@ -78,6 +88,12 @@ export const mockProperties: Property[] = [
     location: "Otranto, Puglia",
     region: "Sud Italia",
     image: "https://picsum.photos/seed/puglia-terrazza/640/420",
+
+    images: [
+      "https://picsum.photos/seed/puglia-terrazza/640/420",
+      "https://picsum.photos/seed/puglia-terrazza-2/640/420",
+      "https://picsum.photos/seed/puglia-terrazza-3/640/420",
+    ],
     sqm: 65,
     guests: 4,
     bedrooms: 1,
@@ -98,6 +114,12 @@ export const mockProperties: Property[] = [
     location: "La Maddalena, Sardegna",
     region: "Isole",
     image: "https://picsum.photos/seed/sardegna-villa/640/420",
+
+    images: [
+      "https://picsum.photos/seed/sardegna-villa/640/420",
+      "https://picsum.photos/seed/sardegna-villa-2/640/420",
+      "https://picsum.photos/seed/sardegna-villa-3/640/420",
+    ],
     sqm: 110,
     guests: 5,
     bedrooms: 2,
@@ -117,6 +139,12 @@ export const mockProperties: Property[] = [
     location: "Val d'Orcia, Toscana",
     region: "Centro Italia",
     image: "https://picsum.photos/seed/toscana-casale/640/420",
+
+    images: [
+      "https://picsum.photos/seed/toscana-casale/640/420",
+      "https://picsum.photos/seed/toscana-casale-2/640/420",
+      "https://picsum.photos/seed/toscana-casale-3/640/420",
+    ],
     sqm: 140,
     guests: 8,
     bedrooms: 4,
@@ -136,6 +164,12 @@ export const mockProperties: Property[] = [
     location: "Lago di Como, Lombardia",
     region: "Nord Italia",
     image: "https://picsum.photos/seed/como-lago/640/420",
+
+    images: [
+      "https://picsum.photos/seed/como-lago/640/420",
+      "https://picsum.photos/seed/como-lago-2/640/420",
+      "https://picsum.photos/seed/como-lago-3/640/420",
+    ],
     sqm: 55,
     guests: 3,
     bedrooms: 1,
@@ -155,6 +189,12 @@ export const mockProperties: Property[] = [
     location: "Valle d'Itria, Puglia",
     region: "Sud Italia",
     image: "https://picsum.photos/seed/puglia-trullo/640/420",
+
+    images: [
+      "https://picsum.photos/seed/puglia-trullo/640/420",
+      "https://picsum.photos/seed/puglia-trullo-2/640/420",
+      "https://picsum.photos/seed/puglia-trullo-3/640/420",
+    ],
     sqm: 50,
     guests: 4,
     bedrooms: 2,

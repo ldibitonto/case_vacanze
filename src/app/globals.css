@@ -18,4 +18,6 @@ html {
 
 body {
   margin: 0;
+  font-family: var(--font-heading), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
 }

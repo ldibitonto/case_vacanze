@@ -109,6 +109,7 @@ type DbProperty = {
   // (o su vecchie righe dopo un aggiornamento manuale). Se assenti/vuoti,
   // si torna al fallback statico qui sotto per le case demo storiche.
   image?: string | null;
+  images?: string[];
   amenities?: string[];
   rating?: number | null;
   reviews?: number | null;
@@ -128,6 +129,10 @@ export function buildDisplayProperty(db: DbProperty, index: number): Property {
     location: db.address ?? "Italia",
     region: "",
     image: db.image || fallback.image,
+    // Galleria per lo slider della card: le foto extra caricate da
+    // /admin/properties, se ce ne sono; altrimenti solo la foto principale
+    // (lo slider si comporta allora come una singola immagine statica).
+    images: db.images && db.images.length > 0 ? db.images : undefined,
     sqm: db.sqm || fallback.sqm,
     guests: db.maxGuests,
     bedrooms: db.bedrooms || Math.max(1, Math.round(db.maxGuests / 2)),

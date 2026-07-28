@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import styles from "./PropertyCard.module.css";
-import { amenityIcon, HeartIcon, ShareIcon, StarIcon } from "./icons";
+import {
+  amenityIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  HeartIcon,
+  ShareIcon,
+  StarIcon,
+} from "./icons";
 import type { Property } from "@/data/mockProperties";
 
 export function PropertyCard({
@@ -18,6 +25,29 @@ export function PropertyCard({
   guests?: number;
 }) {
   const [saved, setSaved] = useState(false);
+
+  // Galleria della card: foto principale + eventuali extra, senza doppioni.
+  // Con una sola foto lo slider non mostra frecce/puntini (inutili).
+  const gallery = useMemo(() => {
+    const all = [property.image, ...(property.images ?? [])].filter(
+      (v): v is string => Boolean(v)
+    );
+    return Array.from(new Set(all));
+  }, [property.image, property.images]);
+  const [slide, setSlide] = useState(0);
+  const hasMultiple = gallery.length > 1;
+
+  function goPrev(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    setSlide((s) => (s - 1 + gallery.length) % gallery.length);
+  }
+
+  function goNext(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    setSlide((s) => (s + 1) % gallery.length);
+  }
 
   // Portiamo date e numero ospiti scelti nella home alla pagina della casa
   // solo se l'utente li ha effettivamente selezionati: altrimenti il
@@ -38,7 +68,42 @@ export function PropertyCard({
     <article className={styles.card}>
       <div className={styles.imageWrap}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={property.image} alt={property.title} className={styles.image} />
+        <img src={gallery[slide]} alt={property.title} className={styles.image} />
+
+        {hasMultiple && (
+          <>
+            {/* Sotto i 640px le frecce sono sempre visibili (niente :hover,
+                che su touch può "sfarfallare" tra comparsa/scomparsa a ogni
+                tap) invece di apparire solo al passaggio del mouse come su
+                desktop: vedi media query in PropertyCard.module.css. */}
+            <button
+              type="button"
+              className={`${styles.slideArrow} ${styles.slideArrowLeft}`}
+              aria-label="Foto precedente"
+              onClick={goPrev}
+            >
+              <ChevronLeftIcon size={18} />
+            </button>
+            <button
+              type="button"
+              className={`${styles.slideArrow} ${styles.slideArrowRight}`}
+              aria-label="Foto successiva"
+              onClick={goNext}
+            >
+              <ChevronRightIcon size={18} />
+            </button>
+
+            <div className={styles.slideDots}>
+              {gallery.map((_, i) => (
+                <span
+                  key={i}
+                  className={`${styles.slideDot} ${i === slide ? styles.slideDotActive : ""}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
         <div className={styles.imageActions}>
           <button type="button" className={styles.roundBtn} aria-label="Condividi">
             <ShareIcon size={14} />
