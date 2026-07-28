@@ -255,18 +255,19 @@
   letter-spacing: 0.01em;
   color: #fff;
   cursor: pointer;
-  background: linear-gradient(160deg, #a855f7 0%, #7c3aed 45%, #c026d3 100%);
-  /* Effetto "chiaroscuro": ombra colorata sotto per il rilievo, riflesso
-     chiaro interno in alto per l'effetto lucido/glossy. */
-  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  /* Stesso azzurro del pulsante "Verifica disponibilità/Prenota" della
+     pagina casa (.widgetBtn in property/[slug]/page.module.css), non più
+     il viola: stesso identico gradiente, stessa ombra "chiaroscuro". */
+  background: linear-gradient(160deg, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   white-space: nowrap;
   transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
 
 .cta:hover {
-  filter: brightness(1.06);
+  filter: brightness(1.05);
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .cta:active {
