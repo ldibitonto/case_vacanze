@@ -167,7 +167,7 @@ export function HomeSearchLayout({
         />
 
         <div className={styles.headerRight}>
-          <a href="/admin" className={styles.rentLink}>
+          <a href="/admin" className={`${styles.rentLink} ${styles.rentLinkAlwaysVisible}`}>
             Gestione case
           </a>
           <a href="#" className={styles.rentLink}>

@@ -19,6 +19,8 @@ type Profile = {
   surname: string;
   phone: string;
   address: string;
+  zip: string;
+  city: string;
 };
 
 type Booking = {
@@ -200,8 +202,30 @@ function AccountPageInner() {
                 className={styles.input}
                 value={profile.address}
                 onChange={(v) => setProfile({ ...profile, address: v })}
-                placeholder="Via, città, provincia"
+                placeholder="Via e numero civico"
               />
+            </div>
+
+            <div className={styles.row2}>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="zip">CAP</label>
+                <input
+                  id="zip"
+                  className={styles.input}
+                  value={profile.zip}
+                  onChange={(e) => setProfile({ ...profile, zip: e.target.value })}
+                />
+              </div>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="city">Città</label>
+                <AddressAutocomplete
+                  id="city"
+                  className={styles.input}
+                  value={profile.city}
+                  onChange={(v) => setProfile({ ...profile, city: v })}
+                  placeholder="Città"
+                />
+              </div>
             </div>
 
             <div className={styles.formFooter}>

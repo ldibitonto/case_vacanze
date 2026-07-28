@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "GuestProfile" ADD COLUMN "zip" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "GuestProfile" ADD COLUMN "city" TEXT NOT NULL DEFAULT '';

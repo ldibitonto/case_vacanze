@@ -179,6 +179,12 @@
   .rentLink {
     display: none;
   }
+  /* "Gestione case" resta visibile anche su mobile (è il link
+     all'amministrazione, non promozionale come "Affitta con noi"). */
+  .rentLinkAlwaysVisible {
+    display: inline-block;
+    font-size: 13.5px;
+  }
   .resultsBar {
     flex-direction: column;
     align-items: flex-start;

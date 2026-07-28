@@ -106,7 +106,9 @@ model GuestProfile {
   name      String   @default("")
   surname   String   @default("")
   phone     String   @default("")
-  address   String   @default("")
+  address   String   @default("") // via/indirizzo (senza CAP e città, separati sotto)
+  zip       String   @default("")
+  city      String   @default("")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

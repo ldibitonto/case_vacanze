@@ -25,6 +25,8 @@ export async function GET(req: NextRequest) {
     surname: profile?.surname ?? "",
     phone: profile?.phone ?? "",
     address: profile?.address ?? "",
+    zip: profile?.zip ?? "",
+    city: profile?.city ?? "",
   });
 }
 
@@ -33,6 +35,8 @@ interface UpdateBody {
   surname?: string;
   phone?: string;
   address?: string;
+  zip?: string;
+  city?: string;
 }
 
 // PUT /api/account/profile — crea/aggiorna il profilo (upsert: al primo
@@ -53,6 +57,8 @@ export async function PUT(req: NextRequest) {
     surname: (body.surname ?? "").trim(),
     phone: (body.phone ?? "").trim(),
     address: (body.address ?? "").trim(),
+    zip: (body.zip ?? "").trim(),
+    city: (body.city ?? "").trim(),
   };
 
   const profile = await prisma.guestProfile.upsert({
@@ -67,5 +73,7 @@ export async function PUT(req: NextRequest) {
     surname: profile.surname,
     phone: profile.phone,
     address: profile.address,
+    zip: profile.zip,
+    city: profile.city,
   });
 }
