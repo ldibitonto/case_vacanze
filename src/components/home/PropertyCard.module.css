@@ -3,6 +3,14 @@
   gap: 16px;
   padding: 12px;
   border-radius: 16px;
+  /* Permette a .footer di reagire alla larghezza REALE della card (che
+     dipende dalla colonna dell'elenco, non dal viewport intero): a finestra
+     ridotta la colonna si stringe pur restando in layout "desktop" a due
+     colonne (elenco + mappa), e senza questo il pulsante "Vai all'offerta"
+     andava a capo in modo incoerente in base alla sola lunghezza del testo
+     di rating/recensioni, finendo ora a sinistra ora al centro invece che
+     ancorato in basso a destra. */
+  container-type: inline-size;
   /* Bianco acceso, per staccare nettamente dallo sfondo pagina (bianco
      sporco/grigio chiarissimo): il contrasto è quello che dà rilievo alla
      card. Il "bordo" non è un bordo pieno ma un'ombra sottilissima
@@ -208,6 +216,11 @@
 .priceBlock {
   text-align: right;
   flex-shrink: 0;
+  /* Se il footer va a capo (poco spazio), questo blocco resta comunque
+     ancorato al bordo destro della card invece di scivolare a sinistra:
+     "justify-content: space-between" del footer non basta perché smette di
+     avere effetto non appena resta un solo elemento per riga. */
+  margin-left: auto;
 }
 
 .priceFrom {
@@ -274,5 +287,34 @@
      sparirebbero ad ogni tocco dello schermo. */
   .slideArrow {
     opacity: 1;
+  }
+}
+
+/* Quando la card stessa è stretta (colonna elenco ridotta, es. finestra del
+   browser più piccola pur restando nel layout desktop a due colonne):
+   invece di lasciare che rating e prezzo+pulsante vadano a capo in modo
+   imprevedibile, forziamo un layout in colonna deliberato, con il pulsante
+   a tutta larghezza — stessa "forma" del pulsante grande del widget di
+   prenotazione (Verifica disponibilità / Prenota) nella pagina della casa,
+   invece del pulsante piccolo in linea. */
+@container (max-width: 460px) {
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .priceBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    margin-left: 0;
+  }
+
+  .cta {
+    width: 100%;
+    height: 50px;
+    font-size: 16px;
   }
 }
