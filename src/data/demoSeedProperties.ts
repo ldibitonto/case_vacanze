@@ -2,15 +2,19 @@ import type { Amenity } from "./mockProperties";
 
 // Case vacanza "demo" distribuite su tutte le 20 regioni italiane, usate
 // solo per popolare il sito di prova con un catalogo realistico (vedi
-// GET /api/admin/seed-demo). Le foto sono su picsum.photos (placeholder
-// fotografico reale, non generato): niente da caricare a mano, e nessun
-// rischio di link morti come con foto "carine" prese da servizi terzi che
-// potrebbero cambiare URL nel tempo.
+// GET /api/admin/seed-demo). Le foto vengono da LoremFlickr, non da
+// picsum.photos: picsum pesca un'immagine causale da tutto il suo
+// catalogo (poteva capitare un tavolino, un gatto, qualunque cosa),
+// mentre LoremFlickr filtra davvero le foto per parole chiave ("villa",
+// "chalet", "trullo"...), quindi mostra soggetti coerenti con ogni casa.
+// Il parametro "lock" rende comunque deterministica la scelta della foto
+// (stessa foto ad ogni caricamento invece di una nuova a ogni richiesta).
 type DemoProperty = {
   name: string;
   slug: string;
   description: string;
   address: string;
+  photoKeyword: string;
   maxGuests: number;
   bedrooms: number;
   bathrooms: number;
@@ -21,12 +25,14 @@ type DemoProperty = {
   amenities: Amenity[];
 };
 
-function images(seed: string): string[] {
-  return [
-    `https://picsum.photos/seed/${seed}/800/533`,
-    `https://picsum.photos/seed/${seed}-2/800/533`,
-    `https://picsum.photos/seed/${seed}-3/800/533`,
-  ];
+function images(seed: string, keyword: string): string[] {
+  // Un "lock" numerico diverso per ciascuna delle 3 foto della stessa casa,
+  // derivato dallo slug così resta stabile tra un deploy e l'altro.
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+  return [1, 2, 3].map(
+    (n) => `https://loremflickr.com/800/533/${keyword}/all?lock=${hash + n}`
+  );
 }
 
 export const demoSeedPropertiesRaw: DemoProperty[] = [
@@ -34,7 +40,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Chalet vista Monte Bianco",
     slug: "chalet-courmayeur",
     description: "Chalet in legno e pietra a due passi dal centro di Courmayeur, con vista diretta sul Monte Bianco.",
-    address: "Via Roma 14, 11013 Courmayeur AO",
+    address: "Courmayeur, Valle d'Aosta",
+    photoKeyword: "chalet,mountainhouse",
     maxGuests: 6,
     bedrooms: 3,
     bathrooms: 2,
@@ -48,7 +55,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Cascina tra i vigneti delle Langhe",
     slug: "cascina-langhe-alba",
     description: "Cascina ristrutturata immersa nei vigneti delle Langhe, a pochi minuti da Alba.",
-    address: "Località Tre Stelle 8, 12051 Alba CN",
+    address: "Alba, Piemonte",
+    photoKeyword: "farmhouse,vineyard",
     maxGuests: 8,
     bedrooms: 4,
     bathrooms: 3,
@@ -62,7 +70,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Loft in centro storico",
     slug: "loft-torino-centro",
     description: "Loft luminoso in un palazzo d'epoca nel cuore di Torino, a due passi da Piazza Castello.",
-    address: "Via Po 22, 10124 Torino TO",
+    address: "Torino, Piemonte",
+    photoKeyword: "loft,apartment",
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 1,
@@ -76,7 +85,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Villa fronte lago con pontile privato",
     slug: "villa-garda-sirmione",
     description: "Villa affacciata sul Lago di Garda con pontile e giardino privato, a due passi da Sirmione.",
-    address: "Via Lungolago 5, 25019 Sirmione BS",
+    address: "Sirmione, Lombardia",
+    photoKeyword: "lakehouse,villa",
     maxGuests: 8,
     bedrooms: 4,
     bathrooms: 3,
@@ -90,7 +100,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Appartamento in Città Alta",
     slug: "appartamento-bergamo-citta-alta",
     description: "Appartamento accogliente nel cuore di Città Alta, tra vicoli medievali e botteghe storiche.",
-    address: "Via Gombito 9, 24129 Bergamo BG",
+    address: "Bergamo, Lombardia",
+    photoKeyword: "apartment,oldtown",
     maxGuests: 3,
     bedrooms: 1,
     bathrooms: 1,
@@ -104,7 +115,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Baita in legno ai piedi delle Dolomiti",
     slug: "baita-val-di-fassa",
     description: "Baita tradizionale in legno con stufa a legna, ai piedi delle Dolomiti di Fassa.",
-    address: "Strada de Contrin 3, 38032 Canazei TN",
+    address: "Canazei, Trentino-Alto Adige",
+    photoKeyword: "cabin,mountainhouse",
     maxGuests: 6,
     bedrooms: 3,
     bathrooms: 2,
@@ -118,7 +130,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Maso tipico con vista vigneti",
     slug: "maso-bolzano-vigneti",
     description: "Maso altoatesino ristrutturato con vista sui vigneti terrazzati intorno a Bolzano.",
-    address: "Via dei Vigneti 17, 39100 Bolzano BZ",
+    address: "Bolzano, Trentino-Alto Adige",
+    photoKeyword: "farmhouse,alps",
     maxGuests: 5,
     bedrooms: 2,
     bathrooms: 2,
@@ -132,7 +145,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Casa sul canale a due passi da San Marco",
     slug: "casa-venezia-canale",
     description: "Casa affacciata su un canale silenzioso, a dieci minuti a piedi da Piazza San Marco.",
-    address: "Calle dei Fabbri 45, 30124 Venezia VE",
+    address: "Venezia, Veneto",
+    photoKeyword: "venicehouse,canal",
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 1,
@@ -146,7 +160,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Chalet di lusso tra le Dolomiti",
     slug: "chalet-cortina-ampezzo",
     description: "Chalet elegante a Cortina d'Ampezzo, con grandi vetrate sulle Tofane.",
-    address: "Via Roma 33, 32043 Cortina d'Ampezzo BL",
+    address: "Cortina d'Ampezzo, Veneto",
+    photoKeyword: "chalet,dolomites",
     maxGuests: 8,
     bedrooms: 4,
     bathrooms: 3,
@@ -160,7 +175,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Appartamento con terrazza sul golfo",
     slug: "appartamento-trieste-golfo",
     description: "Appartamento con ampia terrazza affacciata sul Golfo di Trieste.",
-    address: "Via del Lazzaretto Vecchio 6, 34123 Trieste TS",
+    address: "Trieste, Friuli-Venezia Giulia",
+    photoKeyword: "apartment,seaview",
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 1,
@@ -174,7 +190,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Casa colorata a picco sul mare",
     slug: "casa-vernazza-cinque-terre",
     description: "Casa tipica ligure nel borgo di Vernazza, con vista sul mare delle Cinque Terre.",
-    address: "Via Roma 11, 19018 Vernazza SP",
+    address: "Vernazza, Liguria",
+    photoKeyword: "cinqueterre,house",
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 1,
@@ -188,7 +205,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Villa con accesso privato alla baia",
     slug: "villa-portofino-baia",
     description: "Villa esclusiva con accesso privato alla baia di Portofino e giardino mediterraneo.",
-    address: "Via San Giorgio 2, 16034 Portofino GE",
+    address: "Portofino, Liguria",
+    photoKeyword: "villa,seaside",
     maxGuests: 6,
     bedrooms: 3,
     bathrooms: 3,
@@ -202,7 +220,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Appartamento fronte spiaggia",
     slug: "appartamento-rimini-spiaggia",
     description: "Appartamento moderno a due passi dalla spiaggia di Rimini, ideale per famiglie.",
-    address: "Viale Regina Elena 40, 47921 Rimini RN",
+    address: "Rimini, Emilia-Romagna",
+    photoKeyword: "beachapartment,house",
     maxGuests: 5,
     bedrooms: 2,
     bathrooms: 2,
@@ -216,7 +235,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Casa nel cuore della città rossa",
     slug: "casa-bologna-centro",
     description: "Casa sotto i portici del centro di Bologna, a pochi passi da Piazza Maggiore.",
-    address: "Via Zamboni 18, 40126 Bologna BO",
+    address: "Bologna, Emilia-Romagna",
+    photoKeyword: "italianhouse,oldtown",
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 1,
@@ -230,7 +250,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Casale tra le colline del Chianti",
     slug: "casale-chianti-greve",
     description: "Casale in pietra con piscina panoramica tra i vigneti del Chianti, vicino a Greve in Chianti.",
-    address: "Località Montefioralle 4, 50022 Greve in Chianti FI",
+    address: "Greve in Chianti, Toscana",
+    photoKeyword: "tuscanfarmhouse,villa",
     maxGuests: 9,
     bedrooms: 4,
     bathrooms: 3,
@@ -244,7 +265,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Villa con giardino a due passi dal mare",
     slug: "villa-forte-dei-marmi",
     description: "Villa signorile con giardino privato a pochi minuti a piedi dalla spiaggia di Forte dei Marmi.",
-    address: "Via Carducci 27, 55042 Forte dei Marmi LU",
+    address: "Forte dei Marmi, Toscana",
+    photoKeyword: "villa,tuscany",
     maxGuests: 8,
     bedrooms: 4,
     bathrooms: 3,
@@ -258,7 +280,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Casa in pietra con vista sulla vallata",
     slug: "casa-assisi-vallata",
     description: "Casa in pietra ai piedi della basilica di San Francesco, con vista sulla vallata umbra.",
-    address: "Via San Francesco 21, 06081 Assisi PG",
+    address: "Assisi, Umbria",
+    photoKeyword: "stonehouse,italy",
     maxGuests: 5,
     bedrooms: 2,
     bathrooms: 2,
@@ -272,7 +295,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Villa sulla riviera del Conero",
     slug: "villa-portonovo-conero",
     description: "Villa immersa nel Parco del Conero, a pochi passi dalla spiaggia di Portonovo.",
-    address: "Via Portonovo 60, 60129 Ancona AN",
+    address: "Portonovo, Marche",
+    photoKeyword: "villa,seaside",
     maxGuests: 6,
     bedrooms: 3,
     bathrooms: 2,
@@ -286,7 +310,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Attico con terrazza panoramica",
     slug: "attico-roma-panoramico",
     description: "Attico con grande terrazza panoramica sui tetti di Roma, a due passi dal centro storico.",
-    address: "Via dei Coronari 15, 00186 Roma RM",
+    address: "Roma, Lazio",
+    photoKeyword: "penthouse,rooftop",
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 2,
@@ -300,7 +325,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Casa tra il mare e il parco del Circeo",
     slug: "casa-sabaudia-circeo",
     description: "Casa tra la spiaggia di Sabaudia e il Parco Nazionale del Circeo.",
-    address: "Via Lungomare 88, 04016 Sabaudia LT",
+    address: "Sabaudia, Lazio",
+    photoKeyword: "beachhouse,house",
     maxGuests: 6,
     bedrooms: 3,
     bathrooms: 2,
@@ -314,7 +340,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Rifugio di montagna sul Gran Sasso",
     slug: "rifugio-gran-sasso",
     description: "Rifugio confortevole immerso nel Parco del Gran Sasso, punto di partenza per trekking ed escursioni.",
-    address: "Via Fonte Vetica 2, 67048 Rocca di Mezzo AQ",
+    address: "Rocca di Mezzo, Abruzzo",
+    photoKeyword: "cabin,mountainhouse",
     maxGuests: 5,
     bedrooms: 2,
     bathrooms: 2,
@@ -328,7 +355,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Casa nel borgo marinaro",
     slug: "casa-termoli-borgo",
     description: "Casa nel borgo antico di Termoli, a pochi passi dal porto e dalle spiagge.",
-    address: "Via Duomo 9, 86039 Termoli CB",
+    address: "Termoli, Molise",
+    photoKeyword: "seasidehouse,house",
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 1,
@@ -342,7 +370,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Villa a picco sulla Costiera",
     slug: "villa-amalfi-costiera",
     description: "Villa con terrazze panoramiche a picco sulla Costiera Amalfitana.",
-    address: "Via delle Cartiere 4, 84011 Amalfi SA",
+    address: "Amalfi, Campania",
+    photoKeyword: "villa,amalficoast",
     maxGuests: 7,
     bedrooms: 3,
     bathrooms: 3,
@@ -356,7 +385,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Casa con piscina termale privata",
     slug: "casa-ischia-piscina-termale",
     description: "Casa con piscina termale privata alimentata dalle sorgenti naturali dell'isola d'Ischia.",
-    address: "Via Piemonte 33, 80077 Ischia NA",
+    address: "Ischia, Campania",
+    photoKeyword: "villa,pool",
     maxGuests: 6,
     bedrooms: 3,
     bathrooms: 2,
@@ -370,7 +400,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Casa vista mare sulla scogliera",
     slug: "casa-polignano-scogliera",
     description: "Casa affacciata sulla scogliera di Polignano a Mare, con vista sulla baia.",
-    address: "Via Santa Caterina 12, 70044 Polignano a Mare BA",
+    address: "Polignano a Mare, Puglia",
+    photoKeyword: "cliffhouse,house",
     maxGuests: 5,
     bedrooms: 2,
     bathrooms: 2,
@@ -384,7 +415,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Trullo nella Città Bianca",
     slug: "trullo-ostuni-citta-bianca",
     description: "Trullo autentico nella campagna di Ostuni, a pochi minuti dal centro storico e dal mare.",
-    address: "Contrada Marinelle 6, 72017 Ostuni BR",
+    address: "Ostuni, Puglia",
+    photoKeyword: "trullo,house",
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 1,
@@ -398,7 +430,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Casa scavata nei Sassi",
     slug: "casa-matera-sassi",
     description: "Casa-grotta scavata nel tufo, nel cuore dei Sassi di Matera, patrimonio UNESCO.",
-    address: "Via Bruno Buozzi 19, 75100 Matera MT",
+    address: "Matera, Basilicata",
+    photoKeyword: "cavehouse,house",
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 1,
@@ -412,7 +445,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Villa vista Costa degli Dei",
     slug: "villa-tropea-costa-degli-dei",
     description: "Villa panoramica affacciata sulla Costa degli Dei, a pochi minuti dal centro di Tropea.",
-    address: "Via Marina 21, 89861 Tropea VV",
+    address: "Tropea, Calabria",
+    photoKeyword: "villa,coast",
     maxGuests: 6,
     bedrooms: 3,
     bathrooms: 2,
@@ -426,7 +460,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Casa con vista sull'Etna e il mare",
     slug: "casa-taormina-etna-mare",
     description: "Casa panoramica a Taormina, con vista sull'Etna da un lato e sul mar Ionio dall'altro.",
-    address: "Via Pirandello 17, 98039 Taormina ME",
+    address: "Taormina, Sicilia",
+    photoKeyword: "house,sicily",
     maxGuests: 5,
     bedrooms: 2,
     bathrooms: 2,
@@ -440,7 +475,8 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
     name: "Villa esclusiva sulla Costa Smeralda",
     slug: "villa-porto-cervo-costa-smeralda",
     description: "Villa esclusiva con piscina infinity a picco sulla Costa Smeralda, vicino a Porto Cervo.",
-    address: "Via del Mare 3, 07021 Porto Cervo SS",
+    address: "Porto Cervo, Sardegna",
+    photoKeyword: "luxuryvilla,house",
     maxGuests: 8,
     bedrooms: 4,
     bathrooms: 4,
@@ -455,5 +491,5 @@ export const demoSeedPropertiesRaw: DemoProperty[] = [
 export const demoSeedProperties = demoSeedPropertiesRaw.map((p) => ({
   ...p,
   currency: "EUR" as const,
-  images: images(p.slug),
+  images: images(p.slug, p.photoKeyword),
 }));

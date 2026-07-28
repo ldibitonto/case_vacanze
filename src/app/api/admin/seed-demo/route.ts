@@ -15,12 +15,32 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const createdSlugs: string[] = [];
-  const skippedSlugs: string[] = [];
+  const updatedSlugs: string[] = [];
 
   for (const p of demoSeedProperties) {
     const existing = await prisma.property.findUnique({ where: { slug: p.slug } });
+
     if (existing) {
-      skippedSlugs.push(p.slug);
+      // Già presente (es. da una visita precedente a questo endpoint): se
+      // indirizzo o foto sono cambiati nel frattempo (es. indirizzo corretto
+      // per essere geolocalizzabile, o foto passate da picsum a LoremFlickr
+      // per mostrare davvero case e non soggetti a caso), li aggiorniamo. Se
+      // cambia l'indirizzo azzeriamo anche lat/lng, così la home ri-geocodifica
+      // dal nuovo indirizzo al prossimo caricamento invece di restare bloccata
+      // sulle vecchie coordinate (o sul fallback Roma).
+      const addressChanged = existing.address !== p.address;
+      const imagesChanged = JSON.stringify(existing.images) !== JSON.stringify(p.images);
+
+      if (addressChanged || imagesChanged) {
+        await prisma.property.update({
+          where: { slug: p.slug },
+          data: {
+            ...(addressChanged ? { address: p.address, lat: null, lng: null } : {}),
+            ...(imagesChanged ? { image: p.images[0], images: p.images } : {}),
+          },
+        });
+        updatedSlugs.push(p.slug);
+      }
       continue;
     }
 
@@ -48,8 +68,8 @@ export async function GET() {
 
   return NextResponse.json({
     created: createdSlugs.length,
-    skipped: skippedSlugs.length,
+    updated: updatedSlugs.length,
     createdSlugs,
-    skippedSlugs,
+    updatedSlugs,
   });
 }
