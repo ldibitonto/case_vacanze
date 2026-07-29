@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import styles from "./AccountMenu.module.css";
-import { BriefcaseIcon, MenuIcon, UserCircleIcon } from "./icons";
+import { BriefcaseIcon, LogoutIcon, MenuIcon, UserCircleIcon } from "./icons";
 
 // Menu hamburger dell'header: se non sei loggato apre un piccolo form per
 // "Accedi come guest" (mail -> link via email, come su HomeToGo, vedi
@@ -114,6 +114,7 @@ export function AccountMenu({ isHost = false }: { isHost?: boolean }) {
               </Link>
 
               <button type="button" className={styles.logoutBtn} onClick={handleLogout}>
+                <LogoutIcon size={16} />
                 Esci
               </button>
             </>
@@ -159,6 +160,7 @@ export function AccountMenu({ isHost = false }: { isHost?: boolean }) {
 
           {isHost ? (
             <button type="button" className={styles.hostLogoutBtn} onClick={handleHostLogout}>
+              <LogoutIcon size={16} />
               Esci
             </button>
           ) : (
