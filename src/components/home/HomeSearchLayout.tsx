@@ -50,7 +50,17 @@ export function HomeSearchLayout({
   const [availableIds, setAvailableIds] = useState<Set<string> | null>(null);
   const [checking, setChecking] = useState(false);
   const [dateError, setDateError] = useState<string | null>(null);
-  const [filters, setFilters] = useState<FiltersState>(EMPTY_FILTERS);
+  // Come le date: se si torna qui da un link "torna indietro" che portava
+  // con sé il numero di ospiti scelto in home, lo ripristiniamo invece di
+  // farlo sparire (la pagina casa passa solo un totale, non la
+  // suddivisione adulti/bambini originale: lo mettiamo tutto su "adulti").
+  const [filters, setFilters] = useState<FiltersState>(() => {
+    const initialGuests = Number(searchParams.get("guests"));
+    if (Number.isFinite(initialGuests) && initialGuests > 0) {
+      return { ...EMPTY_FILTERS, adults: initialGuests };
+    }
+    return EMPTY_FILTERS;
+  });
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
 
   // "Gestione case" deve comparire solo per chi ha fatto "Accedi come
@@ -146,6 +156,13 @@ export function HomeSearchLayout({
   return (
     <div className={styles.page}>
       <header className={styles.header}>
+        {/* Su mobile va spostato in alto a sinistra (vedi .accountMenuSlot):
+            per poterlo riordinare con CSS "order" deve essere un figlio
+            diretto di .header, non annidato dentro .headerRight. */}
+        <div className={styles.accountMenuSlot}>
+          <AccountMenu isHost={isHost} />
+        </div>
+
         <div className={styles.logo}>
           <span className={styles.logoGradient}>casa</span>
           <span>vacanze</span>
@@ -186,7 +203,6 @@ export function HomeSearchLayout({
           <a href="#" className={styles.rentLink}>
             Affitta con noi
           </a>
-          <AccountMenu isHost={isHost} />
         </div>
       </header>
 

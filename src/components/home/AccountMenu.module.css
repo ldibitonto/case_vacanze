@@ -47,6 +47,20 @@
   z-index: 60;
 }
 
+@media (max-width: 900px) {
+  /* Su mobile il bottone hamburger sta ora in alto a sinistra
+     (HomeSearchLayout.module.css, .accountMenuSlot): con "right: 0" il
+     dropdown a larghezza fissa (300px) si apriva verso sinistra ed usciva
+     dal bordo dello schermo. Ancorandolo a "left: 0" si apre verso destra,
+     restando dentro il viewport; la larghezza è comunque limitata così non
+     sborda neanche a destra sui telefoni più stretti. */
+  .dropdown {
+    left: 0;
+    right: auto;
+    width: min(300px, calc(100vw - 32px));
+  }
+}
+
 /* --- Stato loggato --- */
 
 .welcomeBlock {

@@ -44,6 +44,15 @@
   flex-shrink: 0;
 }
 
+.accountMenuSlot {
+  /* Su desktop resta l'ultimo elemento della riga (stessa posizione di
+     prima, quando l'AccountMenu era in fondo a .headerRight). Da figlio
+     diretto di .header può però essere riordinato via "order" su mobile,
+     cosa impossibile finché restava annidato dentro .headerRight. */
+  order: 3;
+  flex-shrink: 0;
+}
+
 .rentLink {
   font-size: 15px;
   font-weight: 700;
@@ -175,6 +184,13 @@
   }
   .headerRight {
     gap: 12px;
+    /* L'hamburger (.accountMenuSlot) passa in cima a sinistra (order: -1
+       sotto): questo spinge il resto del blocco destro (Gestione case) a
+       fine riga, mantenendo il "prima" a sinistra e il "dopo" a destra. */
+    margin-left: auto;
+  }
+  .accountMenuSlot {
+    order: -1;
   }
   .rentLink {
     display: none;

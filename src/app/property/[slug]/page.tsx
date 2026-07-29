@@ -301,6 +301,12 @@ function PropertyDetailContent() {
     const qs = new URLSearchParams();
     if (checkIn) qs.set("checkIn", checkIn);
     if (checkOut) qs.set("checkOut", checkOut);
+    // Solo se gli ospiti erano stati scelti in home (query string in arrivo):
+    // altrimenti il valore di default di questa pagina (1) introdurrebbe un
+    // filtro "1 ospite" mai selezionato dall'utente.
+    if (Number.isFinite(initialGuests) && initialGuests > 0) {
+      qs.set("guests", String(guests));
+    }
     const query = qs.toString();
     return `/${query ? `?${query}` : ""}`;
   })();
