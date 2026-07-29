@@ -204,6 +204,31 @@
   flex-shrink: 0;
 }
 
+@media (max-width: 640px) {
+  /* Su mobile la card in riga (foto piccola + testo + pulsanti affiancati)
+     diventava troppo stretta e illeggibile: foto a tutta larghezza in
+     cima, poi nome/indirizzo, poi i pulsanti Modifica/Elimina in fondo. */
+  .card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .thumb,
+  .thumbPlaceholder {
+    width: 100%;
+    height: 200px;
+  }
+
+  .cardActions {
+    justify-content: stretch;
+  }
+
+  .cardActions button {
+    flex: 1;
+  }
+}
+
 .emptyText {
   font-size: 13px;
   color: #9ca3af;
