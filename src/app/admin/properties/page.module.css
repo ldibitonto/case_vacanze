@@ -26,6 +26,7 @@
 .navLinks {
   display: flex;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .backLink {
@@ -52,6 +53,11 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  /* Senza questo, un figlio grid con input/select (che hanno una loro
+     larghezza minima "intrinseca" nel browser) può rifiutarsi di restringersi
+     sotto quella soglia e spingere l'intera pagina oltre il bordo destro
+     dello schermo su mobile, invece di restare centrata. */
+  min-width: 0;
 }
 
 .topBar {
@@ -62,12 +68,17 @@
 
 .filterBar {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   padding: 14px;
   background: #fff;
   border: 1px solid #f0f0f3;
   border-radius: 14px;
+  min-width: 0;
+}
+
+.filterBar .fieldGroup {
+  min-width: 0;
 }
 
 .filterBar .fieldGroup label {
@@ -79,7 +90,15 @@
 
 @media (max-width: 720px) {
   .filterBar {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  /* Su schermi molto stretti anche 2 colonne restano risicate: una sotto
+     l'altra è più leggibile. */
+  .filterBar {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -255,7 +274,7 @@
 
 .row2 {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 14px;
 }
 
@@ -263,6 +282,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 }
 
 .fieldGroup label {
@@ -274,6 +294,9 @@
 .input,
 .textarea,
 .select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   height: 42px;
   padding: 0 12px;
   border-radius: 10px;
