@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_COOKIE, SESSION_COOKIE_MAX_AGE_SECONDS, createSessionValue, verifyLoginToken } from "@/lib/guestAuth";
+import { HOST_SESSION_COOKIE } from "@/lib/hostAuth";
 
 // GET /api/auth/verify?token=... — destinazione del link ricevuto via mail.
 // Verifica la firma/scadenza del token, imposta il cookie di sessione (che
@@ -29,6 +30,10 @@ export async function GET(req: NextRequest) {
       path: "/",
       maxAge: SESSION_COOKIE_MAX_AGE_SECONDS,
     });
+    // Le due sessioni (guest e SuperHost) sono mutuamente esclusive: se prima
+    // avevi fatto accesso come SuperHost, l'accesso come guest ti disconnette
+    // da quella sessione.
+    res.cookies.delete(HOST_SESSION_COOKIE);
   }
 
   return res;

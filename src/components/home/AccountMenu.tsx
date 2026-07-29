@@ -159,7 +159,7 @@ export function AccountMenu({ isHost = false }: { isHost?: boolean }) {
 
           {isHost ? (
             <button type="button" className={styles.hostLogoutBtn} onClick={handleHostLogout}>
-              Esci da SuperHost
+              Esci
             </button>
           ) : (
             <Link href="/admin/login" className={styles.hostLink} onClick={() => setOpen(false)}>

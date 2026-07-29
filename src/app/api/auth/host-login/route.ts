@@ -5,6 +5,7 @@ import {
   createHostSessionValue,
   verifyHostCredentials,
 } from "@/lib/hostAuth";
+import { SESSION_COOKIE as GUEST_SESSION_COOKIE } from "@/lib/guestAuth";
 
 // POST /api/auth/host-login — "Accedi come SuperHost": username/password
 // controllati contro ADMIN_USERNAME/ADMIN_PASSWORD (variabili d'ambiente
@@ -32,5 +33,9 @@ export async function POST(req: NextRequest) {
     path: "/",
     maxAge: HOST_SESSION_MAX_AGE_SECONDS,
   });
+  // Le due sessioni (guest e SuperHost) sono mutuamente esclusive: se prima
+  // avevi fatto accesso come guest, l'accesso come SuperHost ti disconnette
+  // da quella sessione (evita stati ambigui con entrambi i cookie attivi).
+  res.cookies.delete(GUEST_SESSION_COOKIE);
   return res;
 }
