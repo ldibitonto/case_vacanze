@@ -89,16 +89,21 @@
 }
 
 @media (max-width: 720px) {
-  .filterBar {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-}
-
-@media (max-width: 420px) {
-  /* Su schermi molto stretti anche 2 colonne restano risicate: una sotto
-     l'altra è più leggibile. */
+  /* Un campo sotto l'altro, a tutta larghezza e centrato nella card: su
+     mobile 2 colonne restavano comunque strette (indirizzo/nome tagliati). */
   .filterBar {
     grid-template-columns: minmax(0, 1fr);
+    justify-items: stretch;
+    text-align: center;
+  }
+
+  .filterBar .fieldGroup {
+    align-items: center;
+  }
+
+  .filterBar .input,
+  .filterBar .select {
+    text-align: center;
   }
 }
 
