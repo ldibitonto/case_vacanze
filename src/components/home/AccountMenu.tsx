@@ -67,6 +67,12 @@ export function AccountMenu({ isHost = false }: { isHost?: boolean }) {
     window.location.reload();
   }
 
+  async function handleHostLogout() {
+    await fetch("/api/auth/host-logout", { method: "POST" });
+    setOpen(false);
+    window.location.reload();
+  }
+
   return (
     <div className={styles.wrapper} ref={wrapperRef}>
       <button
@@ -151,7 +157,11 @@ export function AccountMenu({ isHost = false }: { isHost?: boolean }) {
             </>
           )}
 
-          {!isHost && (
+          {isHost ? (
+            <button type="button" className={styles.hostLogoutBtn} onClick={handleHostLogout}>
+              Esci da SuperHost
+            </button>
+          ) : (
             <Link href="/admin/login" className={styles.hostLink} onClick={() => setOpen(false)}>
               Accedi come SuperHost
             </Link>
