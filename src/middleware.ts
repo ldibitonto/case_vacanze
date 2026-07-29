@@ -1,43 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
+import { HOST_SESSION_COOKIE, verifyHostSessionValue } from "@/lib/hostAuth";
 
-// Protegge tutta l'area /admin (pagine + API) con HTTP Basic Auth: il
-// browser mostra il classico popup di login nativo e ricorda le
-// credenziali per la sessione. Niente cookie/sessioni da gestire, niente
-// pagina di login da costruire — sufficiente per un pannello interno con
-// pochi utenti fidati.
-// Le credenziali si impostano in .env: ADMIN_USERNAME / ADMIN_PASSWORD.
-function isAuthorized(req: NextRequest): boolean {
-  const expectedUser = process.env.ADMIN_USERNAME;
-  const expectedPass = process.env.ADMIN_PASSWORD;
+// Protegge tutta l'area /admin (pagine + API): serve una sessione valida da
+// "Accedi come SuperHost" (vedi /admin/login e /api/auth/host-login),
+// verificata dal cookie firmato host_session. Sostituisce il precedente
+// HTTP Basic Auth nativo del browser con una vera pagina di login in stile
+// col resto del sito, così anche il link "Gestione case" nell'header può
+// mostrarsi/nascondersi in base allo stato di accesso.
+// Le credenziali restano le stesse di prima: ADMIN_USERNAME / ADMIN_PASSWORD.
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
 
-  // Se le credenziali non sono configurate, neghiamo l'accesso di default
-  // invece di lasciare l'area admin aperta per errore.
-  if (!expectedUser || !expectedPass) return false;
-
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader?.startsWith("Basic ")) return false;
-
-  const decoded = Buffer.from(authHeader.slice("Basic ".length), "base64").toString("utf-8");
-  const separatorIndex = decoded.indexOf(":");
-  if (separatorIndex === -1) return false;
-
-  const user = decoded.slice(0, separatorIndex);
-  const pass = decoded.slice(separatorIndex + 1);
-
-  return user === expectedUser && pass === expectedPass;
-}
-
-export function middleware(req: NextRequest) {
-  if (isAuthorized(req)) {
+  // La pagina di login resta sempre raggiungibile senza sessione,
+  // altrimenti nessuno potrebbe mai autenticarsi.
+  if (pathname === "/admin/login") {
     return NextResponse.next();
   }
 
-  return new NextResponse("Accesso richiesto", {
-    status: 401,
-    headers: {
-      "WWW-Authenticate": 'Basic realm="Area amministrazione", charset="UTF-8"',
-    },
-  });
+  const authed = await verifyHostSessionValue(req.cookies.get(HOST_SESSION_COOKIE)?.value);
+  if (authed) {
+    return NextResponse.next();
+  }
+
+  // Le chiamate API rispondono 401 JSON (le legge fetch lato client);
+  // le pagine vengono rimandate alla schermata di login.
+  if (pathname.startsWith("/api/admin/")) {
+    return NextResponse.json({ error: "Accesso richiesto come SuperHost." }, { status: 401 });
+  }
+
+  const loginUrl = new URL("/admin/login", req.url);
+  loginUrl.searchParams.set("next", pathname);
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {

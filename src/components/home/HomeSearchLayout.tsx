@@ -53,6 +53,17 @@ export function HomeSearchLayout({
   const [filters, setFilters] = useState<FiltersState>(EMPTY_FILTERS);
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
 
+  // "Gestione case" deve comparire solo per chi ha fatto "Accedi come
+  // SuperHost" (vedi /admin/login): all'inizio, o per un visitatore
+  // qualunque, il link resta nascosto.
+  const [isHost, setIsHost] = useState(false);
+  useEffect(() => {
+    fetch("/api/auth/host-me")
+      .then((res) => res.json())
+      .then((data: { loggedIn: boolean }) => setIsHost(!!data.loggedIn))
+      .catch(() => setIsHost(false));
+  }, []);
+
   const petsAllowed = filters.amenities.includes("pets");
 
   function handleChangeGuests(next: { adults: number; children: number; petsAllowed: boolean }) {
@@ -167,13 +178,15 @@ export function HomeSearchLayout({
         />
 
         <div className={styles.headerRight}>
-          <a href="/admin" className={`${styles.rentLink} ${styles.rentLinkAlwaysVisible}`}>
-            Gestione case
-          </a>
+          {isHost && (
+            <a href="/admin" className={`${styles.rentLink} ${styles.rentLinkAlwaysVisible}`}>
+              Gestione case
+            </a>
+          )}
           <a href="#" className={styles.rentLink}>
             Affitta con noi
           </a>
-          <AccountMenu />
+          <AccountMenu isHost={isHost} />
         </div>
       </header>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./page.module.css";
 import type { Amenity } from "@/data/mockProperties";
 import { amenityGroups } from "@/data/amenities";
@@ -244,6 +244,34 @@ export default function AdminPropertiesPage() {
     }
   }
 
+  async function handleLogout() {
+    await fetch("/api/auth/host-logout", { method: "POST" });
+    window.location.href = "/";
+  }
+
+  const [filterCountry, setFilterCountry] = useState("Italia");
+  const [filterName, setFilterName] = useState("");
+  const [filterCity, setFilterCity] = useState("");
+  const [filterAddress, setFilterAddress] = useState("");
+
+  // Nessuna delle case ha oggi un campo "nazione" separato in DB (solo un
+  // indirizzo libero, come nel resto del sito): il filtro nazione è pronto
+  // per quando/se si aggiungeranno case fuori Italia, ma per ora l'unica
+  // opzione è "Italia" e non esclude nulla.
+  const filteredProperties = useMemo(() => {
+    const nameQuery = filterName.trim().toLowerCase();
+    const cityQuery = filterCity.trim().toLowerCase();
+    const addressQuery = filterAddress.trim().toLowerCase();
+
+    return properties.filter((p) => {
+      if (nameQuery && !p.name.toLowerCase().includes(nameQuery)) return false;
+      const addr = (p.address ?? "").toLowerCase();
+      if (cityQuery && !addr.includes(cityQuery)) return false;
+      if (addressQuery && !addr.includes(addressQuery)) return false;
+      return true;
+    });
+  }, [properties, filterName, filterCity, filterAddress]);
+
   async function handleDelete(p: AdminProperty) {
     if (!confirm(`Eliminare "${p.name}"? L'operazione non è reversibile.`)) return;
 
@@ -271,6 +299,9 @@ export default function AdminPropertiesPage() {
           <a href="/" className={styles.backLink}>
             ← Torna al sito
           </a>
+          <button type="button" className={styles.backLink} onClick={handleLogout}>
+            Esci
+          </button>
         </div>
       </div>
 
@@ -292,13 +323,60 @@ export default function AdminPropertiesPage() {
               </button>
             </div>
 
+            <div className={styles.filterBar}>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="filterCountry">Nazione</label>
+                <select
+                  id="filterCountry"
+                  className={styles.select}
+                  value={filterCountry}
+                  onChange={(e) => setFilterCountry(e.target.value)}
+                >
+                  <option value="Italia">Italia</option>
+                </select>
+              </div>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="filterName">Nome casa</label>
+                <input
+                  id="filterName"
+                  className={styles.input}
+                  value={filterName}
+                  onChange={(e) => setFilterName(e.target.value)}
+                  placeholder="Cerca per nome"
+                />
+              </div>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="filterCity">Città</label>
+                <input
+                  id="filterCity"
+                  className={styles.input}
+                  value={filterCity}
+                  onChange={(e) => setFilterCity(e.target.value)}
+                  placeholder="Cerca per città"
+                />
+              </div>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="filterAddress">Indirizzo</label>
+                <input
+                  id="filterAddress"
+                  className={styles.input}
+                  value={filterAddress}
+                  onChange={(e) => setFilterAddress(e.target.value)}
+                  placeholder="Cerca per indirizzo"
+                />
+              </div>
+            </div>
+
             {loading && <p className={styles.emptyText}>Caricamento...</p>}
             {!loading && properties.length === 0 && (
               <p className={styles.emptyText}>Nessuna casa ancora. Creane una con "+ Nuova casa".</p>
             )}
+            {!loading && properties.length > 0 && filteredProperties.length === 0 && (
+              <p className={styles.emptyText}>Nessuna casa corrisponde ai filtri.</p>
+            )}
 
             <div className={styles.list}>
-              {properties.map((p) => (
+              {filteredProperties.map((p) => (
                 <div key={p.id} className={styles.card}>
                   {p.image ? (
                     // eslint-disable-next-line @next/next/no-img-element

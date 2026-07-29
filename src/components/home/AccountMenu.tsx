@@ -11,7 +11,7 @@ import { BriefcaseIcon, MenuIcon, UserCircleIcon } from "./icons";
 // scorciatoie a /account. Nessuna password: lo stato di accesso è deciso
 // dal cookie httpOnly guest_session, che qui leggiamo indirettamente
 // tramite GET /api/auth/me (il client non può leggere un cookie httpOnly).
-export function AccountMenu() {
+export function AccountMenu({ isHost = false }: { isHost?: boolean }) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState<string | null | undefined>(undefined); // undefined = ancora in caricamento
   const [inputEmail, setInputEmail] = useState("");
@@ -149,6 +149,12 @@ export function AccountMenu() {
                 </form>
               )}
             </>
+          )}
+
+          {!isHost && (
+            <Link href="/admin/login" className={styles.hostLink} onClick={() => setOpen(false)}>
+              Accedi come SuperHost
+            </Link>
           )}
         </div>
       )}

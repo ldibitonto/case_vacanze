@@ -32,6 +32,13 @@
   color: #7c3aed;
   text-decoration: none;
   font-weight: 600;
+  /* Usata anche su un <button> (Esci): reset per farlo apparire come gli
+     altri link di navigazione. */
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .backLink:hover {

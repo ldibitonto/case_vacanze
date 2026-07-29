@@ -141,6 +141,11 @@ export default function AdminPage() {
     }
   }
 
+  async function handleLogout() {
+    await fetch("/api/auth/host-logout", { method: "POST" });
+    window.location.href = "/";
+  }
+
   const [requestingReviewId, setRequestingReviewId] = useState<string | null>(null);
 
   async function handleRequestReview(bookingId: string) {
@@ -178,6 +183,9 @@ export default function AdminPage() {
           <a href="/" className={styles.backLink}>
             ← Torna al sito
           </a>
+          <button type="button" className={styles.backLink} onClick={handleLogout}>
+            Esci
+          </button>
         </div>
       </div>
 

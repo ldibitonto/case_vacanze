@@ -33,6 +33,13 @@
   color: #7c3aed;
   text-decoration: none;
   font-weight: 600;
+  /* Usata anche su un <button> (Esci): reset per farlo apparire come gli
+     altri link di navigazione. */
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .backLink:hover {
@@ -51,6 +58,29 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.filterBar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid #f0f0f3;
+  border-radius: 14px;
+}
+
+.filterBar .fieldGroup label {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #9ca3af;
+}
+
+@media (max-width: 720px) {
+  .filterBar {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .primaryBtn {
