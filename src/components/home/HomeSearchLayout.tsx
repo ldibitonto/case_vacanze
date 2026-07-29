@@ -210,9 +210,6 @@ export function HomeSearchLayout({
             ? "Controllo disponibilità..."
             : `${displayedProperties.length.toLocaleString("it-IT")} offerte`}
         </span>
-        <a href="#" className={styles.moreLink}>
-          <strong>Scopri di più</strong> sul posizionamento delle offerte
-        </a>
       </div>
 
       {dateError && <p className={`${styles.statusNote} ${styles.warn}`}>{dateError}</p>}
