@@ -45,11 +45,12 @@
 }
 
 .accountMenuSlot {
-  /* Su desktop resta l'ultimo elemento della riga (stessa posizione di
-     prima, quando l'AccountMenu era in fondo a .headerRight). Da figlio
-     diretto di .header può però essere riordinato via "order" su mobile,
-     cosa impossibile finché restava annidato dentro .headerRight. */
-  order: 3;
+  /* Su desktop è un normale figlio in flusso di .headerRight, identico a
+     prima (nessun "order": un tentativo precedente con order+riordino lo
+     faceva sparire su certe larghezze desktop). Il riposizionamento in
+     alto a sinistra su mobile avviene con position:absolute nella media
+     query sotto, che lo estrae dal flusso senza toccare l'ordine dei
+     flex-item né il layout desktop. */
   flex-shrink: 0;
 }
 
@@ -178,19 +179,30 @@
        "sticky" occupa in modo permanente gran parte dello schermo e allo
        scroll copre/inghiotte l'elenco delle case sotto di sé. Su mobile lo
        lasciamo scorrere via normalmente con il resto della pagina. */
-    position: static;
+    position: relative;
     padding: 12px 16px;
     gap: 12px;
   }
   .headerRight {
     gap: 12px;
-    /* L'hamburger (.accountMenuSlot) passa in cima a sinistra (order: -1
-       sotto): questo spinge il resto del blocco destro (Gestione case) a
-       fine riga, mantenendo il "prima" a sinistra e il "dopo" a destra. */
     margin-left: auto;
   }
   .accountMenuSlot {
-    order: -1;
+    /* Estratto dal flusso: resta ancorato in alto a sinistra dell'header
+       indipendentemente da quanto diventa alto (barra di ricerca che va a
+       capo sotto). Un tentativo precedente con CSS "order" per spostarlo
+       nel flusso normale faceva sparire l'hamburger su desktop: con
+       position:absolute il layout desktop (nessuna regola qui) resta
+       del tutto intatto. */
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    z-index: 5;
+  }
+  .logo {
+    /* Spazio per non sovrapporsi all'hamburger posizionato in assoluto
+       sopra (42px di larghezza + margine). */
+    margin-left: 50px;
   }
   .rentLink {
     display: none;

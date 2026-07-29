@@ -156,13 +156,6 @@ export function HomeSearchLayout({
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        {/* Su mobile va spostato in alto a sinistra (vedi .accountMenuSlot):
-            per poterlo riordinare con CSS "order" deve essere un figlio
-            diretto di .header, non annidato dentro .headerRight. */}
-        <div className={styles.accountMenuSlot}>
-          <AccountMenu isHost={isHost} />
-        </div>
-
         <div className={styles.logo}>
           <span className={styles.logoGradient}>casa</span>
           <span>vacanze</span>
@@ -200,9 +193,14 @@ export function HomeSearchLayout({
               Gestione case
             </a>
           )}
-          <a href="#" className={styles.rentLink}>
-            Affitta con noi
-          </a>
+          {/* Su mobile posizionato in alto a sinistra via CSS (position:
+              absolute nella media query), senza toccare l'ordine dei
+              flex-item: così su desktop resta esattamente com'era prima
+              (ultimo elemento a destra), senza rischio di sparire per
+              via del riordino con "order". */}
+          <div className={styles.accountMenuSlot}>
+            <AccountMenu isHost={isHost} />
+          </div>
         </div>
       </header>
 
