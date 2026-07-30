@@ -16,7 +16,7 @@ function normalize(value: string) {
     .replace(new RegExp("[\\u0300-\\u036f]", "g"), "");
 }
 
-type Suggestion = { label: string; sublabel: string };
+type Suggestion = { label: string; sublabel: string; fullLabel?: string };
 
 type Props = {
   value: string;
@@ -26,6 +26,11 @@ type Props = {
   name?: string;
   className?: string;
   required?: boolean;
+  // "address" (default): cliccando un suggerimento inserisce l'indirizzo
+  // completo (via, numero civico se presente, città...) — per campi
+  // "Indirizzo". "city": inserisce solo il nome del comune — per campi
+  // "Città", dove l'indirizzo completo sarebbe fuorviante.
+  variant?: "address" | "city";
 };
 
 export function AddressAutocomplete({
@@ -36,6 +41,7 @@ export function AddressAutocomplete({
   name,
   className,
   required,
+  variant = "address",
 }: Props) {
   const [open, setOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -110,7 +116,7 @@ export function AddressAutocomplete({
                 key={`${s.label}-${i}`}
                 type="button"
                 className={styles.item}
-                onClick={() => commit(s.label)}
+                onClick={() => commit(variant === "address" ? s.fullLabel ?? s.label : s.label)}
               >
                 <PinIcon size={14} />
                 <span className={styles.itemText}>

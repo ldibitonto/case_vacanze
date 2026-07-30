@@ -329,6 +329,7 @@ function BookingPageContent() {
                     value={city}
                     onChange={setCity}
                     required
+                    variant="city"
                   />
                 </div>
                 <div className={styles.fieldGroup}>

@@ -59,9 +59,20 @@ export async function GET(req: NextRequest) {
         .map((p) => p.trim())
         .filter((p) => p && p.toLowerCase() !== label.toLowerCase());
 
+      // Indirizzo completo (via, numero civico se presenti, città...) per i
+      // campi "Indirizzo": "label" da solo è pensato per i campi "Città" (o
+      // per la ricerca destinazione in home), dove è corretto restituire
+      // solo il nome del comune. Escludiamo "Italia" in coda, ridondante.
+      const fullParts = r.display_name
+        .split(",")
+        .map((p) => p.trim())
+        .filter((p) => p && p.toLowerCase() !== "italia");
+      const fullLabel = fullParts.join(", ") || label;
+
       return {
         label,
         sublabel: parts.join(", "),
+        fullLabel,
         lat: parseFloat(r.lat),
         lng: parseFloat(r.lon),
       };

@@ -224,6 +224,7 @@ function AccountPageInner() {
                   value={profile.city}
                   onChange={(v) => setProfile({ ...profile, city: v })}
                   placeholder="Città"
+                  variant="city"
                 />
               </div>
             </div>
