@@ -11,6 +11,36 @@ import { AddressAutocomplete } from "@/components/home/AddressAutocomplete";
 // dover toccare codice o Prisma Studio. Nessuna autenticazione: come /admin,
 // va bene per uso locale/dev.
 
+// Il campo "address" ora può contenere l'indirizzo completo restituito dal
+// suggeritore (via, numero civico, città, provincia, regione, CAP): nella
+// lista qui sotto mostriamo solo città/provincia/regione, togliendo via e
+// CAP che qui sono superflui e rendono la riga illeggibile.
+const STREET_PREFIXES = [
+  "via",
+  "viale",
+  "corso",
+  "piazza",
+  "piazzale",
+  "strada",
+  "vicolo",
+  "largo",
+  "contrada",
+  "frazione",
+  "borgo",
+  "località",
+  "loc.",
+];
+
+function shortAddress(address: string) {
+  const parts = address
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .filter((p) => !/^\d+$/.test(p)) // CAP puro
+    .filter((p) => !STREET_PREFIXES.some((prefix) => p.toLowerCase().startsWith(`${prefix} `)));
+  return parts.join(", ");
+}
+
 type AdminProperty = {
   id: string;
   name: string;
@@ -387,8 +417,8 @@ export default function AdminPropertiesPage() {
                   <div className={styles.cardInfo}>
                     <p className={styles.cardTitle}>{p.name}</p>
                     <p className={styles.cardMeta}>
-                      {p.address || "Indirizzo non impostato"} · {p.maxGuests} ospiti ·{" "}
-                      {Number(p.basePrice).toFixed(2)} {p.currency}/notte
+                      {(p.address ? shortAddress(p.address) : "") || "Indirizzo non impostato"} ·{" "}
+                      {p.maxGuests} ospiti · {Number(p.basePrice).toFixed(2)} {p.currency}/notte
                     </p>
                   </div>
                   <div className={styles.cardActions}>
